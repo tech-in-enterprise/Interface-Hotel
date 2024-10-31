@@ -92,7 +92,7 @@ export default function Department() {
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Avatar sx={{ width: 150, height: 100, borderRadius: 4, border: '2px solid #ccc', mr: 1 }}>
                         <LocationCityIcon sx={{ fontSize: 60 }} />
-                        <Button size='small' variant="contained" fullWidth component="label" sx={{ position: 'absolute', bottom: 0 }}>
+                        <Button size='small' variant="contained" fullWidth component="label" sx={{ position: 'absolute', bottom: 0 }} style={{fontSize:10}}>
                             Upload Icon
                             <input hidden accept="image/*" type="file" />
                         </Button>
@@ -100,7 +100,7 @@ export default function Department() {
                     <Box sx={{ ml: 2, mr: 1, width: '100%' }}>
                         <TextField variant="standard" size="medium" fullWidth value={newDepartment} placeholder="Criar Novo Departamento" onChange={(e) => setNewDepartment(e.target.value)} />
 
-                        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt:2 }}>
+                        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
                             <Button variant="contained" color="primary" sx={{ fontSize: 12, padding: '6px 12px', textTransform: 'none', mr: 1 }} onClick={handleAddDepartment}>
                                 Adicionar
                             </Button>
