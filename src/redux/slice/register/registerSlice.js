@@ -7,7 +7,6 @@ export const getHotelById = createAsyncThunk(
     async () => {
         try {
             const response = await axios.get(`http://localhost:8000/hotel_data`)
-            console.log("arespoista foi", response.data)
             return response.data
         } catch (error) {
             console.error("Erro ao buscar dados do hotel", error)
