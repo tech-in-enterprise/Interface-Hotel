@@ -34,7 +34,7 @@ export default function CheckInCard() {
                             <Grid item xs={12}>
                                 <Box display="flex" alignItems="center">
                                     <ArrowUpwardIcon fontSize="small" sx={{ color: 'green' }} />
-                                    <Typography variant="body2" sx={{ fontSize: 12, color: 'green', ml: 0.5 }}>
+                                    <Typography variant="body2" sx={{ fontSize: '0.8rem', color: 'green', ml: 0.5 }}>
                                         {briefing.lastWeek}
                                     </Typography>
                                 </Box>

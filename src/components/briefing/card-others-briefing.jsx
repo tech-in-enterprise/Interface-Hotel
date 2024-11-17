@@ -18,24 +18,24 @@ export default function OthersBriefingCard() {
         <Card sx={{ p: 2 }}>
           <Grid container spacing={1}>
             <Grid item xs={4}>
-              <Typography sx={{ fontSize: 12 }}>Status</Typography>
+              <Typography sx={{ fontSize: '0.8rem' }}>Status</Typography>
             </Grid>
             <Grid item xs={4}>
-              <Typography sx={{ fontSize: 12, ml: 1 }}>Uhs</Typography>
+              <Typography sx={{ fontSize: '0.8rem', ml: 1 }}>Uhs</Typography>
             </Grid>
             <Grid item xs={4}>
-              <Typography sx={{ fontSize: 12 }}>Qntd</Typography>
+              <Typography sx={{ fontSize: '0.8rem' }}>Qntd</Typography>
             </Grid>
             {briefingInHouse.map((item, index) => (
               <Grid item xs={12} key={index}>
                 <Grid container alignItems="center">
                   <Grid item xs={4}>
-                    <Typography sx={{ fontSize: 12 }} color="textSecondary">
+                    <Typography sx={{ fontSize: '0.8rem' }} color="textSecondary">
                       {item.type}:
                     </Typography>
                   </Grid>
                   <Grid item xs={4}>
-                    <Typography sx={{ fontSize: 12, ml: 2 }} color="textSecondary">
+                    <Typography sx={{ fontSize: '0.8rem', ml: 2 }} color="textSecondary">
                       {item.count}
                     </Typography>
                   </Grid>

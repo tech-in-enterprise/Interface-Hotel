@@ -16,6 +16,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getAllDepartments, createDepartment, deleteDepartment, setSelectedDepartment } from '../../redux/slice/departments/departmentSlice'
 import { setSelectedTabLabel } from '../../redux/slice/menuSlice'
 import LocationCityIcon from '@mui/icons-material/LocationCity'
+import Skeleton from '@mui/material/Skeleton'
+
+
+
+
+
 
 export default function Department() {
     const dispatch = useDispatch()
@@ -34,6 +40,7 @@ export default function Department() {
             }, 3000)
             return () => clearTimeout(timer)
         }
+        setVisibleMessage('')
     }, [message, departments])
 
     // Exibir erro com duração de 5 segundos
@@ -43,6 +50,7 @@ export default function Department() {
             const timer = setTimeout(() => setVisibleError(null), 3000)
             return () => clearTimeout(timer)
         }
+        setVisibleError('')
     }, [error])
 
     // Retorna todos os departamentos criados
@@ -73,7 +81,7 @@ export default function Department() {
     return (
         <React.Fragment>
             {/* Mostrar mensagens */}
-            {loading && <Alert sx={{ mt: 0, mb: 1 }} severity="info">Carregando Departamentos...</Alert>}
+            {loading && <Alert sx={{ mt: 0, mb: 1 }} severity="info">{message}</Alert>}
             {visibleError && <Alert sx={{ mt: 0, mb: 1 }} severity="error">{visibleError}</Alert>}
             {visibleMessage && !loading && !error && (
                 <Alert sx={{ mt: 0, mb: 1 }} severity={visibleMessage.includes('sucesso') ? 'success' : 'info'}>{visibleMessage}</Alert>
@@ -127,7 +135,21 @@ export default function Department() {
                 </Grid>
             </Paper>
 
-            {departments.length > 0 && (
+            {loading ? (
+                <Paper elevation={3} sx={{ padding: 2 }}>
+                    <Table size="small">
+                        <TableBody>
+                            {[...Array(5)].map((_, index) => (
+                                <TableRow key={index}>
+                                    <TableCell>
+                                        <Skeleton variant="text" />
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </Paper>
+            ) : departments.length > 0 && (
                 <Paper elevation={3} sx={{ padding: 2 }}>
                     <Table size="small">
                         <TableHead>

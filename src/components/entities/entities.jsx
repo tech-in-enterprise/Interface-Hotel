@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import { Button, Box, TextField } from '@mui/material'
 import Table from '@mui/material/Table'
 import TableHead from '@mui/material/TableHead'
@@ -8,21 +8,30 @@ import TableCell from '@mui/material/TableCell'
 import Paper from '@mui/material/Paper'
 import { useDispatch, useSelector } from 'react-redux'
 import { getHotelById } from '../../redux/slice/register/registerSlice'
+import Alert from '@mui/material/Alert'
+import Skeleton from '@mui/material/Skeleton'
 
 
 
-export default function Entities() {
+
+
+export default function () {
 
     const dispatch = useDispatch()
-
+    // Retorna todos as entidades criadas
     useEffect(() => {
         dispatch(getHotelById())
     }, [dispatch])
 
-    const { hotelRegister } = useSelector((state) => state.hotel)
+    const { hotelRegister, loading, message, error } = useSelector((state) => state.hotel)
 
     return (
         <React.Fragment>
+            {/* Mostrar mensagens */}
+            {loading && <Alert sx={{ mt: 0, mb: 1 }} severity="info">{message}</Alert>}
+            {error && !loading && (
+                <Alert sx={{ mt: 0, mb: 1 }} severity="error">{error}</Alert>
+            )}
             <Table sx={{ width: 'auto' }}>
                 <TableBody>
                     <TableRow sx={{ background: '#101F33' }}>
@@ -48,22 +57,53 @@ export default function Entities() {
             </Paper>
 
             Entidades
-            {hotelRegister.map((entity) => (
-                <Paper elevation={3} sx={{ padding: 2 }} key={entity.id}>
-                    <Table  sx={{ tableLayout: 'fixed', width: '100%' }}>
+            {loading ? (
+                <Paper elevation={3} sx={{ padding: 2 }}>
+                    <Table size="small">
+                        <TableBody>
+                            {[...Array(5)].map((_, index) => (
+                                <TableRow key={index}>
+                                    <TableCell>
+                                        <Skeleton variant="text" />
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </Paper>
+            ) : error ? (
+                <Paper elevation={3} sx={{ padding: 2 }} >
+                    <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
                         <TableHead>
                             <TableRow sx={{ background: '#616161' }}>
-                                <TableCell sx={{ fontWeight: 'bold', fontSize: '0.8rem', textAlign: 'center', color: '#FFF', padding: '8px' }}>{entity.name}</TableCell>
-                                <TableCell sx={{ fontWeight: 'bold', fontSize: '0.8rem', textAlign: 'center', color: '#FFF', padding: '8px' }}>{entity.cnpj}</TableCell>
-                                <TableCell sx={{ fontWeight: 'bold', fontSize: '0.8rem', textAlign: 'center', color: '#FFF', padding: '8px' }}>{entity.phone_number}</TableCell>
-                                <TableCell sx={{ fontWeight: 'bold', fontSize: '0.8rem', textAlign: 'center', color: '#FFF', padding: '8px' }}>{entity.city}</TableCell>
-                                <TableCell sx={{ fontWeight: 'bold', fontSize: '0.8rem', textAlign: 'center', color: '#FFF', padding: '8px' }}>{entity.state}</TableCell>
+                                <TableCell sx={{ fontWeight: 'bold', fontSize: '0.8rem', textAlign: 'center', color: '#FFF', padding: '8px' }}>Error name</TableCell>
+                                <TableCell sx={{ fontWeight: 'bold', fontSize: '0.8rem', textAlign: 'center', color: '#FFF', padding: '8px' }}>Error cnpj</TableCell>
+                                <TableCell sx={{ fontWeight: 'bold', fontSize: '0.8rem', textAlign: 'center', color: '#FFF', padding: '8px' }}>Error phone_number</TableCell>
+                                <TableCell sx={{ fontWeight: 'bold', fontSize: '0.8rem', textAlign: 'center', color: '#FFF', padding: '8px' }}>Error city</TableCell>
+                                <TableCell sx={{ fontWeight: 'bold', fontSize: '0.8rem', textAlign: 'center', color: '#FFF', padding: '8px' }}>Error state</TableCell>
                             </TableRow>
                         </TableHead>
                     </Table>
                 </Paper>
-            ))}
-
+            ) : (
+                <>
+                    {hotelRegister.map((entity) => (
+                        <Paper elevation={3} sx={{ padding: 2 }} key={entity.id}>
+                            <Table sx={{ tableLayout: 'fixed', width: '100%' }}>
+                                <TableHead>
+                                    <TableRow sx={{ background: '#616161' }}>
+                                        <TableCell sx={{ fontWeight: 'bold', fontSize: '0.8rem', textAlign: 'center', color: '#FFF', padding: '8px' }}>{entity.hotel_name}</TableCell>
+                                        <TableCell sx={{ fontWeight: 'bold', fontSize: '0.8rem', textAlign: 'center', color: '#FFF', padding: '8px' }}>{entity.cnpj}</TableCell>
+                                        <TableCell sx={{ fontWeight: 'bold', fontSize: '0.8rem', textAlign: 'center', color: '#FFF', padding: '8px' }}>{entity.phone_number}</TableCell>
+                                        <TableCell sx={{ fontWeight: 'bold', fontSize: '0.8rem', textAlign: 'center', color: '#FFF', padding: '8px' }}>{entity.city}</TableCell>
+                                        <TableCell sx={{ fontWeight: 'bold', fontSize: '0.8rem', textAlign: 'center', color: '#FFF', padding: '8px' }}>{entity.state}</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                            </Table>
+                        </Paper>
+                    ))}
+                </>
+            )}
         </React.Fragment>
     )
 }
