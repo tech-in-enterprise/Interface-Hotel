@@ -11,6 +11,7 @@ import DashboardCard from '../../components/briefing/briefing'
 import Department from '../../components/management/departments'
 import ServicesFromDepartments from '../../components/management/services'
 import ProfileHotel from '../../components/management/profile-info-hotel'
+import Entities from '../../components/entities/entities'
 
 
 
@@ -40,7 +41,7 @@ theme = {
 }
 
 
-export default function MenuHome() {
+export default function Home() {
 
 
 
@@ -65,7 +66,10 @@ export default function MenuHome() {
 
   const renderBasedOnItemName = () => {
     switch (itemName) {
-      //gerenciamento
+      //Admin
+      case 'Entidades':
+        return <Entities/>
+      //Gerenciamento
       case 'Departamentos':
         if (selectedTabLabel === 'Serviços') {
           return <ServicesFromDepartments/>
@@ -73,14 +77,14 @@ export default function MenuHome() {
       return <Department />
       case 'Cadastro':
         return <ProfileHotel/>
-      //setores
+      //Setores
       case 'Recepção':
       case 'Governança':
       case 'Restaurante':
       case 'Room Service':
       case 'Manutenção':
         return <ChamadosAbertos />
-      //manutenção de contas
+      //Manutenção de contas
       case 'Relatórios':
         return <DashboardCard/>
       default:

@@ -1,9 +1,9 @@
-import MenuHome from "./pages/home/home"
+import AppRoutes from "./AppRoutes"
 
 
 export default function App() {
   return (
-    <MenuHome/>
+    <AppRoutes/>
   )
 }
 

@@ -64,27 +64,27 @@ export default function MenuSuperior({ handleClick, newTicket }) { // propriedad
     <React.Fragment>
       <AppBar color="primary" position="relative" elevation={0} sx={{ background: '#101F33' }} >
         <Toolbar>
-          <Grid container spacing={1} alignItems="center" sx={{ fontSize: 14 }}>
+          <Grid container spacing={1} alignItems="center" sx={{ fontSize:  '0.9rem'}}>
             <Grid sx={{ display: { sm: 'none', xs: 'block' } }} item>
               <IconButton color="inherit" aria-label="open drawer" edge="start">
                 <MenuIcon />
               </IconButton>
             </Grid>
             <Grid item xs>
-              <Typography color="inherit">
+              <Typography color="inherit"  sx={{ fontSize: '0.9rem'  }}>
                 {itemName} {selectedTabLabel && ` | ${selectedTabLabel}`}
               </Typography>
             </Grid>
             <Grid item xs />
             <Grid item>
-              <CalendarMonthIcon style={{ fontSize: 16 }} sx={{ mr: 1 }} />
+              <CalendarMonthIcon style={{ fontSize: '1rem' }} sx={{ mr: 1 }} />
               {dataFormatada}
             </Grid>
-            <Grid item>
+            <Grid item sx={{ fontSize: '0.9rem'  }}>
               Yuri Alvarenga
             </Grid>
             <Grid item>
-              <IconButton color="inherit" sx={{ fontSize: 14 }}>
+              <IconButton color="inherit" sx={{ fontSize: '0.9rem'  }}>
                 sair
               </IconButton>
             </Grid>
@@ -95,15 +95,10 @@ export default function MenuSuperior({ handleClick, newTicket }) { // propriedad
         <Toolbar>
           <Grid container alignItems="center" spacing={1}>
             <Grid item xs>
-              {itemName && !["Home", 'Cadastro', "Departamentos", "Escala", "Contas", "Novo Chamado"].includes(itemName) && (
+              {itemName && !["Home", 'Entidades', 'Usuários', 'Cadastro', "Departamentos", "Escala", "Contas", "Novo Chamado"].includes(itemName) && (
                 <Tabs value={value !== null ? value : false} onChange={handleChange}>
                   {tabs.map((tab) => (
-                    <Tab
-                      key={tab.key}
-                      sx={{ textTransform: 'none', color: '#606060', '&.Mui-selected': { color: '#FFF' } }}
-                      value={tab.value}
-                      label={tab.label}
-                    />
+                    <Tab key={tab.key} sx={{ textTransform: 'none', color: '#606060', '&.Mui-selected': { color: '#FFF' } }} value={tab.value} label={tab.label}/>
                   ))}
                 </Tabs>
               )}
@@ -113,9 +108,9 @@ export default function MenuSuperior({ handleClick, newTicket }) { // propriedad
                 {newTicket ? (
                   <React.Fragment>
                     <IconButton color="inherit">
-                      <CloseIcon style={{ fontSize: 18, color: 'red' }} />
+                      <CloseIcon style={{ fontSize: '1rem', color: 'red' }} />
                     </IconButton>
-                    <Typography sx={{ fontSize: 14 }}>
+                    <Typography sx={{ fontSize: '0.9rem'  }}>
                       Fechar Chamado
                     </Typography>
                   </React.Fragment>
@@ -126,7 +121,7 @@ export default function MenuSuperior({ handleClick, newTicket }) { // propriedad
                         <AddCircleOutlineIcon style={{ fontSize: 18 }} />
                       </IconButton>
                     </Tooltip>
-                    <Typography sx={{ fontSize: 14 }}>
+                    <Typography sx={{ fontSize: '0.9rem'  }}>
                       Novo Chamado
                     </Typography>
                   </React.Fragment>

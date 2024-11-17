@@ -31,18 +31,18 @@ export default function OpenManualTicket({ open, onClose }) {
             color: 'red',
           }}
         >
-          <CloseIcon style={{ fontSize: 18 }} />
+          <CloseIcon style={{ fontSize: '1rem' }} />
         </IconButton>
-        <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ mb: 4 }}>
+        <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ mb: 4, fontSize:'1rem' }}>
           Criar Chamado Manual
         </Typography>
-        <TextField label="Apartamento" variant="standard" sx={{ m: 1 }} InputLabelProps={{ style: { fontSize: 14 } }} />
-        <TextField label="Setor" variant="standard" sx={{ m: 1 }} InputLabelProps={{ style: { fontSize: 14 } }} />
-        <TextField label="Solicitação" variant="standard" sx={{ m: 1 }} InputLabelProps={{ style: { fontSize: 14 } }} />
-        <TextField label="Quantidade" variant="standard" type="number" sx={{ m: 1 }} InputLabelProps={{ style: { fontSize: 14 } }} />
+        <TextField label="Apartamento" variant="standard" sx={{ m: 1 }} InputLabelProps={{ style: { fontSize: '0.9rem' } }} />
+        <TextField label="Setor" variant="standard" sx={{ m: 1 }} InputLabelProps={{ style: { fontSize: '0.9rem' } }} />
+        <TextField label="Solicitação" variant="standard" sx={{ m: 1 }} InputLabelProps={{ style: { fontSize: '0.9rem' } }} />
+        <TextField label="Quantidade" variant="standard" type="number" sx={{ m: 1 }} InputLabelProps={{ style: { fontSize: '0.9rem' } }} />
 
         <Box sx={{ display: 'flex', flexDirection: 'row-reverse', mt: 4 }}>
-          <Button variant="contained" sx={{ fontSize: 10 }}>
+          <Button variant="contained" sx={{ fontSize: '0.8rem' }}>
             Enviar
           </Button>
         </Box>

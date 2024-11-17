@@ -17,6 +17,8 @@ import { FaRegIdCard } from "react-icons/fa"
 import { AiOutlineBarChart } from "react-icons/ai"
 import FolderSharedIcon from '@mui/icons-material/FolderShared'
 import GroupsIcon from '@mui/icons-material/Groups'
+import ApartmentIcon from '@mui/icons-material/Apartment'
+import PersonIcon from '@mui/icons-material/Person'
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar'
 
 
@@ -50,11 +52,18 @@ export default function MenuLateral() {
   // ícones e nomes que estão no menu lateral
   const categories = [
     {
+      name: 'Admin',
+      children: [
+        {id: 101, name: 'Entidades', icon: <ApartmentIcon style={{ fontSize: '1rem' }}/> },
+        {id: 102, name: 'Usuários', icon: <PersonIcon style={{ fontSize: '1rem' }}/> },
+      ]
+    },
+    {
       name: 'Gerenciamento',
       children: [
-        {id: 101, name: 'Cadastro', icon: <FaRegIdCard /> },
-        { id: 102, name: 'Departamentos', icon: <GroupsIcon style={{ fontSize: 16 }}/> },
-        { id: 103, name: 'Escala', icon: <PermContactCalendarIcon style={{ fontSize: 16 }}/> }
+        {id: 202, name: 'Cadastro', icon: <FaRegIdCard style={{ fontSize: '1rem' }}/> },
+        { id: 203, name: 'Departamentos', icon: <GroupsIcon style={{ fontSize: '1rem' }}/> },
+        { id: 204, name: 'Escala', icon: <PermContactCalendarIcon style={{ fontSize: '1rem' }}/> }
       ]
     },
     ...(departments.length > 0
@@ -69,27 +78,27 @@ export default function MenuLateral() {
     {
       name: 'Manutenção de Contas',
       children: [
-        { id: 201, name: 'Contas', icon: <FolderSharedIcon style={{ fontSize: 16 }} /> },
-        { id: 202, name: 'Relatórios', icon: <AiOutlineBarChart /> },
+        { id: 301, name: 'Contas', icon: <FolderSharedIcon style={{ fontSize: '1rem' }} /> },
+        { id: 302, name: 'Relatórios', icon: <AiOutlineBarChart /> },
       ],
     },
   ]
 
   return (
-    <Drawer variant="permanent" sx={{ background: '#101F33', }}>
-      <List disablePadding sx={{ background: '#101F33', height: '100vh' }}>
-        <ListItem sx={{ py: 1, px: 3, color: 'rgba(255, 255, 255, 0.7)', boxShadow: '0 -1px 0 rgb(255,255,255,0.1) inset', fontSize: 16, color: '#fff' }}>
+    <Drawer variant="permanent" sx={{ background: '#101F33' }}>
+      <List disablePadding sx={{ background: '#101F33', height: '100vh', width: 200}}>
+        <ListItem sx={{ py: 1, px: 3, color: 'rgba(255, 255, 255, 0.7)', boxShadow: '0 -1px 0 rgb(255,255,255,0.1) inset', fontSize: '1rem' , color: '#fff' }}>
           <ViewInArIcon />
-          <Typography variant="body3" sx={{ ml: 4 }}>
+          <Typography variant="body3" sx={{ ml: 2,  fontSize: '0.9rem' }}>
             Tech-in
           </Typography>
         </ListItem>
 
         <ListItem disablePadding sx={{ background: '#101F33' }} onClick={handleDashboardClick}>
-          <ListItemButton selected={activeItem === 0} sx={{ py: 1, px: 2, fontSize: 14, color: 'rgba(255, 255, 255, 0.7)' }} >
-            <ListItemIcon><HomeIcon style={{ fontSize: 16 }} /></ListItemIcon>
+          <ListItemButton selected={activeItem === 0} sx={{ py: 1, px: 2, color: 'rgba(255, 255, 255, 0.7)' }} >
+            <ListItemIcon><HomeIcon style={{ fontSize: '1rem' }} /></ListItemIcon>
             <ListItemText>
-              <Typography sx={{ fontSize: 14 }}>
+              <Typography sx={{ fontSize: '0.9rem'  }}>
                 Início
               </Typography>
             </ListItemText>
@@ -99,10 +108,10 @@ export default function MenuLateral() {
 
         {categories.map(({ name, children }) => (
           <Box key={name} sx={{ bgcolor: '#101F33' }}>
-            <ListItem sx={{ p: 2, pb:0 }}>
+            <ListItem sx={{ p: 1, pb:0 }}>
               <ListItemText
-                sx={{ color: '#fff' }}
-                primary={<Typography sx={{ fontSize: '1rem' }}>{name}</Typography>}
+                sx={{ color: 'rgba(255, 255, 255, 0.7)', mb: 0}}
+                primary={<Typography sx={{ fontSize: '0.9rem' }}>{name}</Typography>}
               />
             </ListItem>
             {children.map(({ id, name: childName, icon }) => (
@@ -110,7 +119,7 @@ export default function MenuLateral() {
                 <ListItemButton selected={activeItem === id} sx={{ color: 'rgba(255, 255, 255, 0.7)' }} onClick={() => handleCategoryItemClick(childName, id)}>
                   <ListItemIcon >{icon}</ListItemIcon>
                   <ListItemText>
-                    <Typography sx={{ fontSize: 12 }}>
+                    <Typography sx={{ fontSize: '0.8rem'  }}>
                       {childName}
                     </Typography>
                   </ListItemText>

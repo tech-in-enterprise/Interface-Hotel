@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Box, TextField, Avatar } from '@mui/material'
+import { Button, Box, TextField, Avatar, Grid } from '@mui/material'
 import Table from '@mui/material/Table'
 import TableHead from '@mui/material/TableHead'
 import TableBody from '@mui/material/TableBody'
@@ -19,11 +19,31 @@ import LocationCityIcon from '@mui/icons-material/LocationCity'
 
 export default function Department() {
     const dispatch = useDispatch()
-    const { departments, message } = useSelector((state) => state.departments)
+    const { departments, message, error, loading } = useSelector((state) => state.departments)
 
     const [newDepartment, setNewDepartment] = useState('')
-    const [showCreateAlert, setShowCreateAlert] = useState(false)
-    const [showDeleteAlert, setShowDeleteAlert] = useState(false)
+    const [visibleMessage, setVisibleMessage] = useState(null)
+    const [visibleError, setVisibleError] = useState(null)
+
+    // Exibir mensagem com duração de 5 segundos
+    useEffect(() => {
+        if (message) {
+            setVisibleMessage(message)
+            const timer = setTimeout(() => {
+                setVisibleMessage(null)
+            }, 3000)
+            return () => clearTimeout(timer)
+        }
+    }, [message, departments])
+
+    // Exibir erro com duração de 5 segundos
+    useEffect(() => {
+        if (error) {
+            setVisibleError(error)
+            const timer = setTimeout(() => setVisibleError(null), 3000)
+            return () => clearTimeout(timer)
+        }
+    }, [error])
 
     // Retorna todos os departamentos criados
     useEffect(() => {
@@ -35,23 +55,16 @@ export default function Department() {
         if (newDepartment.trim()) {
             dispatch(createDepartment({ name: newDepartment.trim() }))
             setNewDepartment('')
-            setShowCreateAlert(true)
-            setTimeout(() => {
-                setShowCreateAlert(false)
-            }, 3000)
         }
     }
 
     // Deletar departamento
     const handleDeleteDepartment = (departmentId) => {
+
         dispatch(deleteDepartment(departmentId))
-        setShowDeleteAlert(true)
-        setTimeout(() => {
-            setShowDeleteAlert(false)
-        }, 3000)
     }
 
-    //abrir página de serviços relacionado ao departamento criado
+    // Abrir página de serviços relacionado ao departamento criado
     const showComponentService = (department) => {
         dispatch(setSelectedDepartment(department))
         dispatch(setSelectedTabLabel('Serviços'))
@@ -59,57 +72,59 @@ export default function Department() {
 
     return (
         <React.Fragment>
+            {/* Mostrar mensagens */}
+            {loading && <Alert sx={{ mt: 0, mb: 1 }} severity="info">Carregando Departamentos...</Alert>}
+            {visibleError && <Alert sx={{ mt: 0, mb: 1 }} severity="error">{visibleError}</Alert>}
+            {visibleMessage && !loading && !error && (
+                <Alert sx={{ mt: 0, mb: 1 }} severity={visibleMessage.includes('sucesso') ? 'success' : 'info'}>{visibleMessage}</Alert>
+            )}
+            {departments.length === 0 && !visibleMessage && !loading && !error && (
+                <Alert sx={{ mt: 0, mb: 1 }} severity="info">Você não possui departamentos criados.</Alert>
+            )}
+            {error && departments.length === 0 && !visibleError && !loading && (
+                <Alert sx={{ mt: 0, mb: 1 }} severity="error">{error}</Alert>
+            )}
+
             <Table sx={{ width: 'auto' }}>
                 <TableBody>
                     <TableRow sx={{ background: '#101F33' }}>
-                        <TableCell sx={{ fontSize: 12, fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF', width: '75%' }}>
+                        <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF', width: '75%' }}>
                             Gerenciamento de Departamentos
                         </TableCell>
                     </TableRow>
                 </TableBody>
             </Table>
-            {/* Mostrar alerta de sucesso quando criar ou deletar */}
-            {showCreateAlert && message && (
-                <Alert severity='success' sx={{ mb: 2, mt: 1 }}>
-                    Departamento criado com sucesso
-                </Alert>
-            )}
 
-            {showDeleteAlert && message && (
-                <Alert severity='success' sx={{ mb: 2, mt: 1 }}>
-                    Departamento removido com sucesso
-                </Alert>
-            )}
 
-            {/* Mostrar mensagem informativa se não houver departamentos */}
-            {!showCreateAlert && !showDeleteAlert && departments.length === 0 && (
-                <Alert severity='info' sx={{ mb: 2, mt: 1 }}>
-                    Você não possui nenhum departamento cadastrado
-                </Alert>
-            )}
 
             <Paper elevation={3} sx={{ padding: 2, mt: 2, mb: 2 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Avatar sx={{ width: 150, height: 100, borderRadius: 4, border: '2px solid #ccc', mr: 1 }}>
-                        <LocationCityIcon sx={{ fontSize: 60 }} />
-                        <Button size='small' variant="contained" fullWidth component="label" sx={{ position: 'absolute', bottom: 0 }} style={{fontSize:10}}>
+                <Grid container spacing={2} alignItems="center">
+                    <Grid item xs={2}>
+                        <Avatar sx={{ width: '100%', height: 100, borderRadius: 3, border: '2px solid #ccc' }}>
+                            <LocationCityIcon sx={{ fontSize: 60 }} />
+                        </Avatar>
+                    </Grid>
+                    <Grid item xs={10}>
+                        <TextField variant="standard" size="medium" fullWidth value={newDepartment} placeholder="Criar Novo Departamento" onChange={(e) => setNewDepartment(e.target.value)} />
+                    </Grid>
+
+                    <Grid item xs={2}>
+                        <Button size='small' variant="contained" fullWidth component="label" sx={{ bottom: 0 }} style={{ fontSize: 10 }}>
                             Upload Icon
                             <input hidden accept="image/*" type="file" />
                         </Button>
-                    </Avatar>
-                    <Box sx={{ ml: 2, mr: 1, width: '100%' }}>
-                        <TextField variant="standard" size="medium" fullWidth value={newDepartment} placeholder="Criar Novo Departamento" onChange={(e) => setNewDepartment(e.target.value)} />
-
-                        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-                            <Button variant="contained" color="primary" sx={{ fontSize: 12, padding: '6px 12px', textTransform: 'none', mr: 1 }} onClick={handleAddDepartment}>
+                    </Grid>
+                    <Grid item xs={10}>
+                        <Grid container spacing={1} justifyContent="flex-end">
+                            <Button variant="contained" color="primary" sx={{ fontSize: '0.8rem', padding: '6px 12px', textTransform: 'none', mr: 1 }} onClick={handleAddDepartment}>
                                 Adicionar
                             </Button>
-                            <Button variant="contained" color="error" sx={{ fontSize: 12, padding: '6px 12px', textTransform: 'none' }}>
+                            <Button variant="contained" color="error" sx={{ fontSize: '0.8rem', padding: '6px 12px', textTransform: 'none' }}>
                                 Cancelar
                             </Button>
-                        </Box>
-                    </Box>
-                </Box>
+                        </Grid>
+                    </Grid>
+                </Grid>
             </Paper>
 
             {departments.length > 0 && (
@@ -117,10 +132,10 @@ export default function Department() {
                     <Table size="small">
                         <TableHead>
                             <TableRow sx={{ background: '#101F33' }}>
-                                <TableCell sx={{ fontSize: 12, fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF', width: '75%' }}>
+                                <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF', width: '75%' }}>
                                     Departamentos
                                 </TableCell>
-                                <TableCell sx={{ fontSize: 12, fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
+                                <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
                                     Ações
                                 </TableCell>
                             </TableRow>
@@ -128,23 +143,23 @@ export default function Department() {
                         <TableBody>
                             {departments.map((department) => (
                                 <TableRow key={department.id} sx={{ background: '#FFF' }}>
-                                    <TableCell sx={{ fontSize: 12, border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
+                                    <TableCell sx={{ fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
                                         {department.name}
                                     </TableCell>
-                                    <TableCell sx={{ fontSize: 12, border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>
+                                    <TableCell sx={{ fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>
                                         <Tooltip title="Adicionar Serviços">
                                             <IconButton onClick={() => showComponentService(department)}>
-                                                <AddCircleOutlineIcon style={{ fontSize: 18 }} />
+                                                <AddCircleOutlineIcon style={{ fontSize: '1rem' }} />
                                             </IconButton>
                                         </Tooltip>
                                         <Tooltip title="Editar Departamento">
                                             <IconButton>
-                                                <BorderColorIcon style={{ fontSize: 18 }} />
+                                                <BorderColorIcon style={{ fontSize: '1rem' }} />
                                             </IconButton>
                                         </Tooltip>
                                         <Tooltip title="Deletar Departamento">
                                             <IconButton onClick={() => handleDeleteDepartment(department.id)}>
-                                                <DeleteForeverIcon style={{ fontSize: 18 }} />
+                                                <DeleteForeverIcon style={{ fontSize: '1rem' }} />
                                             </IconButton>
                                         </Tooltip>
                                     </TableCell>
