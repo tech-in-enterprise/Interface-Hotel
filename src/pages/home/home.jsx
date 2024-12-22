@@ -8,10 +8,11 @@ import { useSelector } from 'react-redux'
 import ChamadosAbertos from '../../components/chamados/chamados-abertos'
 import OpenManualTicket from '../../components/open-manual-ticket/open-manual-ticket'
 import DashboardCard from '../../components/briefing/briefing'
-import Department from '../../components/management/departments'
-import ServicesFromDepartments from '../../components/management/services'
-import ProfileHotel from '../../components/management/profile-info-hotel'
-import Entities from '../../components/entities/entities'
+import Department from '../../components/management/departments/departments'
+import ServicesFromDepartments from '../../components/management/services-hotel/services'
+import ProfileHotel from '../../components/management/profile-info-hotel/profile-info-hotel'
+import Entities from '../../components/admin/entities/entities'
+import Users from '../../components/admin/users/users'
 
 
 
@@ -69,6 +70,8 @@ export default function Home() {
       //Admin
       case 'Entidades':
         return <Entities/>
+      case 'Usuários':
+        return <Users/>
       //Gerenciamento
       case 'Departamentos':
         if (selectedTabLabel === 'Serviços') {

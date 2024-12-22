@@ -9,7 +9,7 @@ import BorderColorIcon from '@mui/icons-material/BorderColor'
 import Tooltip from '@mui/material/Tooltip'
 import IconButton from '@mui/material/IconButton'
 import { useDispatch, useSelector } from 'react-redux'
-import { getHotelById } from '../../redux/slice/register/registerSlice'
+import { getHotelById } from '../../../redux/slice/register/registerSlice'
 import LocationCityIcon from '@mui/icons-material/LocationCity'
 import Alert from '@mui/material/Alert'
 import Skeleton from '@mui/material/Skeleton'
@@ -295,7 +295,7 @@ export default function ProfileHotel() {
                 </Table>
                 <Paper elevation={3} sx={{ padding: 2 }}>
                     <Grid container spacing={2}>
-                        <Grid item xs={12} sm={4}>
+                        <Grid item xs={12} sm={6}>
                             <TextField label="Café da manhã" fullWidth variant="standard" InputLabelProps={{ style: { fontSize: '0.9rem' } }} />
                         </Grid>
                     </Grid>
