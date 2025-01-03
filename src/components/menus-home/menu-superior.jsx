@@ -23,6 +23,8 @@ export default function MenuSuperior({ handleClick, newTicket }) { // propriedad
   //utilizando redux para disparar os novos estados (item do menu que foi clicado e enviar para store)
   const itemName = useSelector((state) => state.menu.itemName)
   const selectedTabLabel = useSelector((state) => state.menu.selectedTabLabel)
+
+  const { user } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -81,7 +83,7 @@ export default function MenuSuperior({ handleClick, newTicket }) { // propriedad
               {dataFormatada}
             </Grid>
             <Grid item sx={{ fontSize: '0.9rem'  }}>
-              Yuri Alvarenga
+              {user}
             </Grid>
             <Grid item>
               <IconButton color="inherit" sx={{ fontSize: '0.9rem'  }}>

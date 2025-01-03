@@ -4,7 +4,7 @@ import CheckInCard from './card-check-ins'
 import CheckOutCard from './card-check-outs'
 import InHouseCard from './card-in-hotel'
 import OthersBriefingCard from './card-others-briefing'
-import BarChartCheckIns from './chekin-in-week'
+
 
 export default function DashboardCard() {
   return (
@@ -23,9 +23,6 @@ export default function DashboardCard() {
       </Grid>
       <Grid item md={6}>
         <OthersBriefingCard />
-      </Grid>
-      <Grid item md={6}>
-        <BarChartCheckIns />
       </Grid>
     </Grid>
   )

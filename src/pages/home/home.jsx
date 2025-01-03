@@ -13,6 +13,7 @@ import ServicesFromDepartments from '../../components/management/services-hotel/
 import ProfileHotel from '../../components/management/profile-info-hotel/profile-info-hotel'
 import Entities from '../../components/admin/entities/entities'
 import Users from '../../components/admin/users/users'
+import ComponentHome from '../../components/component-home/home'
 
 
 
@@ -67,6 +68,9 @@ export default function Home() {
 
   const renderBasedOnItemName = () => {
     switch (itemName) {
+      //home(início)
+      case 'Home':
+        return <ComponentHome/>
       //Admin
       case 'Entidades':
         return <Entities/>

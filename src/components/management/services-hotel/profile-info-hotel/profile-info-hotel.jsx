@@ -1,27 +1,76 @@
-import React, { useEffect } from 'react'
-import { Box, TextField, Avatar, Button, Grid, Paper, Typography } from '@mui/material'
+import React, { useReducer, useEffect } from 'react'
+import { Box, TextField, Avatar, Button, Grid, Paper } from '@mui/material'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableRow from '@mui/material/TableRow'
 import TableCell from '@mui/material/TableCell'
+import { IoIosCheckmarkCircleOutline } from "react-icons/io"
+import BorderColorIcon from '@mui/icons-material/BorderColor'
+import Tooltip from '@mui/material/Tooltip'
+import IconButton from '@mui/material/IconButton'
 import { useDispatch, useSelector } from 'react-redux'
 import { getHotelById } from '../../../redux/slice/register/registerSlice'
 import LocationCityIcon from '@mui/icons-material/LocationCity'
 import Alert from '@mui/material/Alert'
 import Skeleton from '@mui/material/Skeleton'
-import BorderColorIcon from '@mui/icons-material/BorderColor'
-import Tooltip from '@mui/material/Tooltip'
-import IconButton from '@mui/material/IconButton'
 
 
 
-const services = [
-    { name: "Café da manhã", startTime: "06:00", endTime: "10:30" },
-    { name: "Almoço", startTime: "12:00", endTime: "14:00" },
-    { name: "Jantar", startTime: "19:00", endTime: "22:00" },
-    { name: "Piscina", startTime: "19:00", endTime: "22:00" },
-    { name: "Sauna", startTime: "09:00", endTime: "20:00" },
-]
+//inputs de informações de redes sociais e wifi do hotel
+
+const actions = {
+    toggleEdit: 'toggle-edit',
+    updateValue: 'update-value'
+}
+
+const reducer = (state, action) => {
+    switch (action.type) {
+        case actions.toggleEdit:
+            return {
+                ...state,
+                [action.field]: {
+                    ...state[action.field],
+                    editable: !state[action.field].editable
+                }
+            }
+        case actions.updateValue:
+            return {
+                ...state,
+                [action.field]: {
+                    ...state[action.field],
+                    value: action.value
+                }
+            }
+        default:
+            return state
+    }
+}
+
+function EditableField({ label, field, state, dispatch }) {
+    const { value, editable } = state[field]
+
+    return (
+        <Box sx={{ position: 'relative' }}>
+            <TextField
+                label={label}
+                fullWidth
+                variant="standard"
+                value={value}
+                onChange={(e) =>
+                    dispatch({ type: actions.updateValue, field, value: e.target.value })
+                }
+                disabled={!editable}
+                InputLabelProps={{ style: { fontSize: '0.9rem' } }}
+            />
+            <Tooltip title={editable ? "Salvar" : "Editar"} sx={{ position: 'absolute', top: '30%', right: 0 }}>
+                <IconButton onClick={() => dispatch({ type: actions.toggleEdit, field })}>
+                    {editable && value ? <IoIosCheckmarkCircleOutline style={{ fontSize: 18 }} color='#55a630' /> : !editable && <BorderColorIcon style={{ fontSize: 18 }} />}
+                </IconButton>
+            </Tooltip>
+        </Box>
+    )
+}
+
 
 export default function ProfileHotel() {
 
@@ -33,6 +82,16 @@ export default function ProfileHotel() {
     useEffect(() => {
         dispatch(getHotelById())
     }, [dispatch])
+
+    const initialState = {
+        facebook: { value: '', editable: true },
+        instagram: { value: '', editable: true },
+        wifiNetwork: { value: '', editable: true },
+        wifiPassword: { value: '', editable: true }
+    }
+
+    const [state, localDispatch] = useReducer(reducer, initialState)
+
 
     return (
         <React.Fragment>
@@ -102,28 +161,28 @@ export default function ProfileHotel() {
                     // Mostra os campos com apenas os labels se houver erro
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
-                            <TextField disabled label="Nome do Hotel" fullWidth variant="standard" sx={{ m: 1 }} InputLabelProps={{ style: { fontSize: '0.9rem' } }} />
+                            <TextField disabled label="Nome do Hotel" fullWidth variant="standard" sx={{ m: 1 }} InputLabelProps={{ style: { fontSize: '0.9rem' }}} />
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <TextField disabled label="Nome Fantasia" fullWidth variant="standard" sx={{ m: 1 }} InputLabelProps={{ style: { fontSize: '0.9rem' } }} />
+                            <TextField disabled label="Nome Fantasia" fullWidth variant="standard" sx={{ m: 1 }} InputLabelProps={{ style: { fontSize: '0.9rem' }}} />
                         </Grid>
                         <Grid item xs={12} sm={3}>
-                            <TextField disabled label="Rua" fullWidth variant="standard" sx={{ m: 1 }} InputLabelProps={{ style: { fontSize: '0.9rem' } }} />
+                            <TextField disabled label="Rua" fullWidth variant="standard" sx={{ m: 1 }} InputLabelProps={{ style: { fontSize: '0.9rem' }}} />
                         </Grid>
                         <Grid item xs={12} sm={3}>
-                            <TextField disabled label="Número" fullWidth variant="standard" sx={{ m: 1 }} InputLabelProps={{ style: { fontSize: '0.9rem' } }} />
+                            <TextField disabled label="Número" fullWidth variant="standard" sx={{ m: 1 }} InputLabelProps={{ style: { fontSize: '0.9rem' }}} />
                         </Grid>
                         <Grid item xs={12} sm={3}>
-                            <TextField disabled label="Cidade" fullWidth variant="standard" sx={{ m: 1 }} InputLabelProps={{ style: { fontSize: '0.9rem' } }} />
+                            <TextField disabled label="Cidade" fullWidth variant="standard" sx={{ m: 1 }} InputLabelProps={{ style: { fontSize: '0.9rem' }}} />
                         </Grid>
                         <Grid item xs={12} sm={3}>
-                            <TextField disabled label="Estado" fullWidth variant="standard" sx={{ m: 1 }} InputLabelProps={{ style: { fontSize: '0.9rem' } }} />
+                            <TextField disabled label="Estado" fullWidth variant="standard" sx={{ m: 1 }} InputLabelProps={{ style: { fontSize: '0.9rem' }}} />
                         </Grid>
                         <Grid item xs={12} sm={3}>
-                            <TextField disabled label="CEP" fullWidth variant="standard" sx={{ m: 1 }} InputLabelProps={{ style: { fontSize: '0.9rem' } }} />
+                            <TextField disabled label="CEP" fullWidth variant="standard" sx={{ m: 1 }} InputLabelProps={{ style: { fontSize: '0.9rem' }}} />
                         </Grid>
                         <Grid item xs={12} sm={3}>
-                            <TextField disabled label="Telefone" fullWidth variant="standard" sx={{ m: 1 }} InputLabelProps={{ style: { fontSize: '0.9rem' } }} />
+                            <TextField disabled label="Telefone" fullWidth variant="standard" sx={{ m: 1 }} InputLabelProps={{ style: { fontSize: '0.9rem' }}} />
                         </Grid>
                     </Grid>
                 ) : (
@@ -174,87 +233,79 @@ export default function ProfileHotel() {
             </Paper>
 
 
-            {/* Horários do Hotel */}
-            <Table sx={{ width: 'auto' }}>
-                <TableBody>
-                    <TableRow sx={{ background: '#101F33' }}>
-                        <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF', width: '75%' }}>
-                            Horários do Hotel
-                        </TableCell>
-                    </TableRow>
-                </TableBody>
-            </Table>
-            <Paper elevation={3} sx={{ padding: 2, mt: 1, mb: 2 }}>
+            <Paper elevation={3} sx={{ padding: 2, mt: 2, mb: 2 }}>
+                {/* Redes Sociais*/}
                 <Grid container spacing={2}>
-                    {services.map((service, index) => (
-                        <Grid item xs={12} sm={4} key={index}>
-                            <Paper elevation={3} sx={{ padding: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <Typography sx={{ fontSize: "0.9rem", fontWeight: "bold", mr: 1 }}>
-                                        {service.name}:
-                                    </Typography>
-                                    <Typography sx={{ fontSize: "0.8rem", color: "gray" }}>
-                                        {service.startTime} às {service.endTime}
-                                    </Typography>
-                                </Box>
-                                <Tooltip title="Editar Departamento">
-                                    <IconButton>
-                                        <BorderColorIcon style={{ fontSize: '1rem' }} />
-                                    </IconButton>
-                                </Tooltip>
-                            </Paper>
-                        </Grid>
-                    ))}
+                    <Grid item xs={12} sm={6}>
+                        <Table sx={{ width: 'auto', mb: 2 }}>
+                            <TableBody>
+                                <TableRow >
+                                    <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', padding: '8px', textAlign: 'center' }}>
+                                        Redes Sociais
+                                    </TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
+
+                        <Paper elevation={3} sx={{ padding: 2 }}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} sm={6}>
+                                    <EditableField fullWidth label="Facebook" field="facebook" state={state} dispatch={localDispatch} />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <EditableField label="Instagram" field="instagram" state={state} dispatch={localDispatch} />
+                                </Grid>
+                            </Grid>
+                        </Paper>
+                    </Grid>
+                    {/* Dados do wi-fi */}
+                    <Grid item xs={12} sm={6}>
+                        <Table sx={{ width: 'auto', mb: 2 }}>
+                            <TableBody>
+                                <TableRow>
+                                    <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', padding: '8px', textAlign: 'center' }}>
+                                        Wi-fi
+                                    </TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
+
+                        <Paper elevation={3} sx={{ padding: 2 }}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} sm={6}>
+                                    <EditableField label="Rede" field="wifiNetwork" state={state} dispatch={localDispatch} />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <EditableField label="Senha" field="wifiPassword" state={state} dispatch={localDispatch} />
+                                </Grid>
+                            </Grid>
+                        </Paper>
+                    </Grid>
                 </Grid>
 
+                {/* Horários do Hotel */}
+                <Table sx={{ width: 'auto', mb: 2, mt: 2 }}>
+                    <TableBody>
+                        <TableRow>
+                            <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', padding: '8px', textAlign: 'center' }}>
+                                Horários
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+                <Paper elevation={3} sx={{ padding: 2 }}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField label="Café da manhã" fullWidth variant="standard" InputLabelProps={{ style: { fontSize: '0.9rem' } }} />
+                        </Grid>
+                    </Grid>
+                </Paper>
                 <Box sx={{ display: 'flex', flexDirection: 'row-reverse', mt: 2 }} >
                     <Button variant="contained" color="primary" sx={{ fontSize: '0.8rem', padding: '6px 12px', textTransform: 'none' }}>
                         Salvar
                     </Button>
                 </Box>
             </Paper>
-
-            {/* Outros serviços */}
-            <Table sx={{ width: 'auto' }}>
-                <TableBody>
-                    <TableRow sx={{ background: '#101F33' }}>
-                        <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF', width: '75%' }}>
-                            Outros Serviços
-                        </TableCell>
-                    </TableRow>
-                </TableBody>
-            </Table>
-            <Paper elevation={3} sx={{ padding: 2, mt: 1, mb: 2 }}>
-                <Grid container spacing={2}>
-                    {services.map((service, index) => (
-                        <Grid item xs={12} sm={4} key={index}>
-                            <Paper elevation={3} sx={{ padding: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <Typography sx={{ fontSize: "0.9rem", fontWeight: "bold", mr: 1 }}>
-                                        {service.name}:
-                                    </Typography>
-                                    <Typography sx={{ fontSize: "0.8rem", color: "gray" }}>
-                                        {service.startTime} às {service.endTime}
-                                    </Typography>
-                                </Box>
-                                <Tooltip title="Editar Departamento">
-                                    <IconButton>
-                                        <BorderColorIcon style={{ fontSize: '1rem' }} />
-                                    </IconButton>
-                                </Tooltip>
-                            </Paper>
-                        </Grid>
-                    ))}
-                </Grid>
-
-                <Box sx={{ display: 'flex', flexDirection: 'row-reverse', mt: 2 }} >
-                    <Button variant="contained" color="primary" sx={{ fontSize: '0.8rem', padding: '6px 12px', textTransform: 'none' }}>
-                        Salvar
-                    </Button>
-                </Box>
-            </Paper>
-       
-
-        </React.Fragment >
+        </React.Fragment>
     )
 }

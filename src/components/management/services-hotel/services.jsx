@@ -12,7 +12,8 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import BorderColorIcon from '@mui/icons-material/BorderColor'
 import { useSelector, useDispatch } from 'react-redux'
 import { setSelectedTabLabel } from "../../../redux/slice/menuSlice"
-import { getAllServices } from "../../../redux/slice/departments/servicesSlice"
+import { getAllServices } from "../../../redux/slice/departments/serviceSlice"
+
 
 
 export default function ServicesFromDepartments() {
