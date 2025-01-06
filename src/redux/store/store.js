@@ -1,9 +1,9 @@
 import {configureStore} from '@reduxjs/toolkit'
 import loginSlice from '../slice/auth/loginSlice'
 import menuReducer from '../slice/menuSlice'
-import departmentSlice from '../slice/departments/departmentSlice'
+import departmentSlice from '../slice/departments/departments'
 import serviceSlice from '../slice/departments/serviceSlice'
-import hotelSlice from '../slice/register/registerSlice'
+import hotelSlice from '../slice/admin/register-hotel'
 import roleSlice from '../slice/roles/roleSlice'
 
 

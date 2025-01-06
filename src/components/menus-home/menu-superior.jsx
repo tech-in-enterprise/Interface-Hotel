@@ -14,6 +14,9 @@ import Tab from '@mui/material/Tab'
 import { Box } from '@mui/material'
 import { useSelector, useDispatch } from 'react-redux'
 import { setSelectedTabLabel } from '../../redux/slice/menuSlice'
+import { handleLogout } from '../auth/sign-in/sign-out'
+import { useNavigate } from 'react-router-dom'
+
 
 
 export default function MenuSuperior({ handleClick, newTicket }) { // propriedades vindo da página home
@@ -26,6 +29,7 @@ export default function MenuSuperior({ handleClick, newTicket }) { // propriedad
 
   const { user } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
+  const navigate = useNavigate() 
 
   useEffect(() => {
     setValue(null)
@@ -86,7 +90,7 @@ export default function MenuSuperior({ handleClick, newTicket }) { // propriedad
               {user}
             </Grid>
             <Grid item>
-              <IconButton color="inherit" sx={{ fontSize: '0.9rem'  }}>
+              <IconButton onClick={() => handleLogout(dispatch, navigate)} color="inherit" sx={{ fontSize: '0.9rem'  }}>
                 sair
               </IconButton>
             </Grid>

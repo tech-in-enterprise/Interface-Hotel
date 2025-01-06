@@ -17,6 +17,7 @@ import { getAllDepartments, createDepartment, deleteDepartment, setSelectedDepar
 import { setSelectedTabLabel } from '../../../redux/slice/menuSlice'
 import LocationCityIcon from '@mui/icons-material/LocationCity'
 import Skeleton from '@mui/material/Skeleton'
+import Title from '../../general-components/title-from-pages'
 
 
 
@@ -93,17 +94,7 @@ export default function Department() {
                 <Alert sx={{ mt: 0, mb: 1 }} severity="error">{error}</Alert>
             )}
 
-            <Table sx={{ width: 'auto' }}>
-                <TableBody>
-                    <TableRow sx={{ background: '#101F33' }}>
-                        <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF', width: '75%' }}>
-                            Gerenciamento de Departamentos
-                        </TableCell>
-                    </TableRow>
-                </TableBody>
-            </Table>
-
-
+            <Title Title={"Gerenciamento de Departamentos"}/>
 
             <Paper elevation={3} sx={{ padding: 2, mt: 2, mb: 2 }}>
                 <Grid container spacing={2} alignItems="center">

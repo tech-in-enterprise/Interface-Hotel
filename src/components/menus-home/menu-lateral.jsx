@@ -12,9 +12,10 @@ import HomeIcon from '@mui/icons-material/Home'
 import { Typography } from '@mui/material'
 import { setItemName, setSelectedTabLabel } from '../../redux/slice/menuSlice'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllDepartments } from '../../redux/slice/departments/departmentSlice'
+import { getAllDepartments } from '../../redux/slice/departments/departments'
 import { getCategories } from './utils-menu-lateral/categories-menu-lateral'
 import { filterCategories } from './utils-menu-lateral/filterCategories'
+import { useNavigate } from 'react-router-dom'
 
 
 
@@ -22,7 +23,8 @@ import { filterCategories } from './utils-menu-lateral/filterCategories'
 export default function MenuLateral() {
 
   const dispatch = useDispatch()
-  const [activeItem, setActiveItem] = useState(0)
+  const navigate = useNavigate()
+  const [activeItem, setActiveItem] = useState(Number(localStorage.getItem('activeMenuItem')) || 0)
   const { role, hotel } = useSelector((state) => state.auth)
   const { departments } = useSelector((state) => state.departments)
 
@@ -37,16 +39,20 @@ export default function MenuLateral() {
     dispatch(setItemName('Home'))
     dispatch(setSelectedTabLabel(''))
     setActiveItem(0)
+    localStorage.setItem('activeMenuItem', 0) 
+    navigate("/")
   }
 
 
-  const handleCategoryItemClick = (childName, id) => {
+  const handleCategoryItemClick = (childName, id, path) => {
     dispatch(setItemName(childName))
     dispatch(setSelectedTabLabel(''))
     setActiveItem(id)
+    localStorage.setItem('activeMenuItem', id)
+    navigate(path)
   }
 
-  const categories = getCategories(departments)
+  const categories = getCategories( departments)
 
   const filteredCategories  = filterCategories(categories, role, hotel)
 
@@ -62,7 +68,7 @@ export default function MenuLateral() {
 
         <ListItem disablePadding sx={{ background: '#101F33' }} onClick={handleDashboardClick}>
           <ListItemButton selected={activeItem === 0} sx={{ py: 1, px: 2, color: 'rgba(255, 255, 255, 0.7)' }} >
-            <ListItemIcon><HomeIcon style={{ fontSize: '1rem' }} /></ListItemIcon>
+            <ListItemIcon><HomeIcon style={{ fontSize: '1rem', color:'#FFF' }} /></ListItemIcon>
             <ListItemText>
               <Typography sx={{ fontSize: '0.9rem' }}>
                 Início
@@ -81,9 +87,9 @@ export default function MenuLateral() {
                   primary={<Typography sx={{ fontSize: '0.9rem' }}>{name}</Typography>}
                 />
               </ListItem>
-              {children.map(({ id, name: childName, icon }) => (
+              {children.map(({ id, name: childName, icon, path }) => (
                 <ListItem disablePadding key={id}>
-                  <ListItemButton selected={activeItem === id} sx={{ color: 'rgba(255, 255, 255, 0.7)' }} onClick={() => handleCategoryItemClick(childName, id)}>
+                  <ListItemButton selected={activeItem === id} sx={{ color: 'rgba(255, 255, 255, 0.7)' }} onClick={() => handleCategoryItemClick(childName, id, path)}>
                     <ListItemIcon >{icon}</ListItemIcon>
                     <ListItemText>
                       <Typography sx={{ fontSize: '0.8rem' }}>

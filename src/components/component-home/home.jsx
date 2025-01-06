@@ -1,7 +1,7 @@
 import React from "react"
 import { useSelector } from "react-redux"
 import { Box } from "@mui/material"
-
+import Title from "../general-components/title-from-pages"
 
 
 export default function ComponentHome() {
@@ -11,15 +11,7 @@ export default function ComponentHome() {
     return (
         <Box>
             {role === "Administrador" ? (
-                <div>
-                    <h1>Bem-vindo, Administrador</h1>
-                    <p>Aqui você pode gerenciar:</p>
-                    <ul>
-                        <li>Usuários</li>
-                        <li>Entidades</li>
-                        <li>Configurações gerais</li>
-                    </ul>
-                </div>
+                <Title Title = {"Admin"}/>
             ) : role === "Gerente" ? (
                 <div>
                     <h1>Bem-vindo, Gerente</h1>

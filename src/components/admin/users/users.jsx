@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { Button, TextField, Grid, Box } from '@mui/material'
-import Table from '@mui/material/Table'
-import TableBody from '@mui/material/TableBody'
-import TableRow from '@mui/material/TableRow'
-import TableCell from '@mui/material/TableCell'
 import Paper from '@mui/material/Paper'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
@@ -11,7 +7,8 @@ import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllRoles } from '../../../redux/slice/roles/roleSlice'
-import { getHotelById } from '../../../redux/slice/register/registerSlice'
+import { getHotelById } from '../../../redux/slice/admin/register-hotel'
+import Title from '../../general-components/title-from-pages'
 
 
 
@@ -34,15 +31,7 @@ export default function Users() {
 
     return (
         <React.Fragment>
-            <Table sx={{ width: 'auto' }}>
-                <TableBody>
-                    <TableRow sx={{ background: '#101F33' }}>
-                        <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF', width: '75%' }}>
-                            Gerenciamento de Usuários
-                        </TableCell>
-                    </TableRow>
-                </TableBody>
-            </Table>
+            <Title Title={"Gerenciamento de Usuários"} />
             <Paper elevation={3} sx={{ padding: 2, mt: 2, mb: 2 }}>
                 <Grid item xs={12} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Grid container spacing={2}>
@@ -51,9 +40,17 @@ export default function Users() {
                                 label="Nome do usuário"
                                 required
                                 fullWidth
-                                variant="standard"
-                                sx={{ m: 1 }}
-                                InputLabelProps={{ style: { fontSize: '0.9rem' } }}
+                                variant="outlined"
+                                InputProps={{
+                                    style: { height: '40px', padding: '0' },
+                                }}
+                                InputLabelProps={{
+                                    style: {
+                                        fontSize: '0.9rem',
+                                        lineHeight: '15px',
+                                        paddingRight: 2
+                                    },
+                                }}
                             />
                         </Grid>
                         <Grid item xs={3}>
@@ -61,9 +58,17 @@ export default function Users() {
                                 label="E-mail"
                                 required
                                 fullWidth
-                                variant="standard"
-                                sx={{ m: 1 }}
-                                InputLabelProps={{ style: { fontSize: '0.9rem' } }}
+                                variant="outlined"
+                                InputProps={{
+                                    style: { height: '40px', padding: '0' },
+                                }}
+                                InputLabelProps={{
+                                    style: {
+                                        fontSize: '0.9rem',
+                                        lineHeight: '15px',
+                                        paddingRight: 2
+                                    },
+                                }}
                             />
                         </Grid>
 
@@ -73,9 +78,18 @@ export default function Users() {
                                 type="password"
                                 required
                                 fullWidth
-                                variant="standard"
-                                sx={{ m: 1 }}
-                                InputLabelProps={{ style: { fontSize: '0.9rem' } }}
+                                variant="outlined"
+                                
+                                InputProps={{
+                                    style: { height: '40px', padding: '0' },
+                                }}
+                                InputLabelProps={{
+                                    style: {
+                                        fontSize: '0.9rem',
+                                        lineHeight: '15px',
+                                        paddingRight: 2
+                                    },
+                                }}
                             />
                         </Grid>
                         <Grid item xs={3}>
@@ -84,15 +98,21 @@ export default function Users() {
                                 type="password"
                                 required
                                 fullWidth
-                                variant="standard"
-                                sx={{ m: 1 }}
-                                InputLabelProps={{ style: { fontSize: '0.9rem' } }}
+                                variant="outlined"
+                                InputProps={{ style: { height: '40px' }}}
+                                InputLabelProps={{
+                                    style: {
+                                        fontSize: '0.9rem',
+                                        lineHeight: '15px',
+                                        paddingRight: 2
+                                    },
+                                }}
                             />
                         </Grid>
 
                         <Grid item xs={6}>
                             <FormControl fullWidth>
-                                <InputLabel id="select-label">Nível de acesso</InputLabel>
+                                <InputLabel sx={{ fontSize: '0.9rem', lineHeight: '1rem', paddingRight: 2}} id="select-label">Nível de acesso</InputLabel>
                                 <Select
                                     labelId="select-label"
                                     id="select"
@@ -100,6 +120,7 @@ export default function Users() {
                                     required
                                     value={selectedRole}
                                     onChange={handleRoleChange}
+                                    sx={{ height: '40px'}}
                                 >
                                     {roles.map((role) => (
                                         <MenuItem key={role.id} value={role.id}>
@@ -113,12 +134,8 @@ export default function Users() {
                         {selectedRole === 2 && (
                             <Grid item xs={6}>
                                 <FormControl fullWidth>
-                                    <InputLabel id="select-label">Hotel</InputLabel>
-                                    <Select
-                                        labelId="select-label"
-                                        id="select"
-                                        label="Hotel"
-                                    >
+                                    <InputLabel sx={{ fontSize: '0.9rem', lineHeight: '1rem', paddingRight: 2}} id="select-label">Hotel</InputLabel>
+                                    <Select labelId="select-label" id="select" label="Hotel" sx={{ height: '40px'}}>
                                         {hotelRegister.map((hotel) => (
                                             <MenuItem key={hotel.id} value={hotel.id}>
                                                 {hotel.hotel_name}
@@ -131,7 +148,7 @@ export default function Users() {
 
                     </Grid>
                 </Grid>
-                <Box sx={{ display: 'flex', flexDirection: 'row-reverse', mt: 2 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row-reverse', mt: 1 }}>
                     <Button variant="contained" color="primary" sx={{ fontSize: '0.8rem', padding: '6px 12px', textTransform: 'none' }}>
                         Salvar
                     </Button>

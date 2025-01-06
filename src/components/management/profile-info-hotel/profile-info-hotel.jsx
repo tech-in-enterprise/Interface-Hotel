@@ -12,6 +12,7 @@ import Skeleton from '@mui/material/Skeleton'
 import BorderColorIcon from '@mui/icons-material/BorderColor'
 import Tooltip from '@mui/material/Tooltip'
 import IconButton from '@mui/material/IconButton'
+import Title from '../../general-components/title-from-pages'
 
 
 
@@ -42,15 +43,7 @@ export default function ProfileHotel() {
                 <Alert sx={{ mt: 0, mb: 1 }} severity="error">{error}</Alert>
             )}
 
-            <Table sx={{ width: 'auto' }}>
-                <TableBody>
-                    <TableRow sx={{ background: '#101F33' }}>
-                        <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF', width: '75%' }}>
-                            Gerenciamento de Perfil
-                        </TableCell>
-                    </TableRow>
-                </TableBody>
-            </Table>
+            <Title Title={"Gerencialmento de Perfil"}/>
 
             <Paper elevation={3} sx={{ display: 'flex', padding: 2, mt: 2, mb: 2 }}>
                 {/* Foto do hotel */}
