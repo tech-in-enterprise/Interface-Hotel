@@ -21,7 +21,7 @@ export const getCategories = (departments = []) => {
       role: ['Administrador'],
       children: [
         { id: 101, name: 'Entidades', icon: <ApartmentIcon style={{ fontSize: '1rem', color: '#FFF' }} />, path: selectedHotelId  ?  `/admin/entidades/${selectedHotelId}` : '/admin/entidades' },
-        { id: 102, name: 'Usuários', icon: <PersonIcon style={{ fontSize: '1rem', color: '#FFF' }} />, path: '/admin/usuarios' },
+        { id: 102, name: 'Usuários', icon: <PersonIcon style={{ fontSize: '1rem', color: '#FFF' }} />, path: selectedHotelId  ?  `admin/usuarios/${selectedHotelId }` :  '/admin/usuarios' },
       ]
     },
     {

@@ -1,6 +1,6 @@
 import axios from "axios"
 import Cookies from 'js-cookie'
-import { handleLogout } from "../../components/auth/sign-in/sign-out"
+import { handleLogout } from "../../components/auth/sign-out"
 
 
 

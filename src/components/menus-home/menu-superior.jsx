@@ -14,7 +14,7 @@ import Tab from '@mui/material/Tab'
 import { Box } from '@mui/material'
 import { useSelector, useDispatch } from 'react-redux'
 import { setSelectedTabLabel } from '../../redux/slice/menuSlice'
-import { handleLogout } from '../auth/sign-in/sign-out'
+import { handleLogout } from '../auth/sign-out'
 import { useNavigate } from 'react-router-dom'
 
 

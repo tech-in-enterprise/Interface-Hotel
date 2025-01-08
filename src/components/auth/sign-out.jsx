@@ -1,5 +1,5 @@
 import Cookies from "js-cookie"
-import { logout } from "../../../redux/slice/auth/loginSlice"
+import { logout } from "../../redux/slice/auth/loginSlice"
 
 
 // Função de logout global

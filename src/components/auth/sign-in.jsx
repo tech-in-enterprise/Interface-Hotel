@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Grid, TextField, Box, Button, Typography, Alert } from "@mui/material"
 import { useDispatch, useSelector } from 'react-redux'
-import { loginUser, clearError } from '../../../redux/slice/auth/loginSlice'
+import { loginUser, clearError } from '../../redux/slice/auth/loginSlice'
 import { useNavigate } from 'react-router-dom'
 import CircularProgress from '@mui/material/CircularProgress'
 

@@ -124,7 +124,6 @@ export default function AllEntities() {
                 </Paper>
             ) : (
                 <>
-
                     <Paper elevation={3} sx={{ padding: 2 }} >
                         <Table size="small">
                             <TableHead>

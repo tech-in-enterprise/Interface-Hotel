@@ -9,13 +9,21 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getAllRoles } from '../../../redux/slice/roles/roleSlice'
 import { getHotelById } from '../../../redux/slice/admin/register-hotel'
 import Title from '../../general-components/title-from-pages'
+import Table from '@mui/material/Table'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
+import TableCell from '@mui/material/TableCell'
+
 
 
 
 export default function Users() {
+
     const dispatch = useDispatch()
-    const { roles, message, error, loading } = useSelector((state) => state.roles)
+    const { roles } = useSelector((state) => state.roles)
     const { hotelRegister } = useSelector((state) => state.hotel)
+    const selectedHotelId = useSelector((state) => state.auth.hotel)
+
 
     useEffect(() => {
         dispatch(getAllRoles())
@@ -28,7 +36,10 @@ export default function Users() {
         setSelectedRole(event.target.value)
     }
 
-
+    const [selectedHotel, setSelectedHotel] = useState(selectedHotelId || "")
+    const handleHotelChange = (event) => {
+        setSelectedHotel(event.target.value)
+    }
     return (
         <React.Fragment>
             <Title Title={"Gerenciamento de Usuários"} />
@@ -79,7 +90,7 @@ export default function Users() {
                                 required
                                 fullWidth
                                 variant="outlined"
-                                
+
                                 InputProps={{
                                     style: { height: '40px', padding: '0' },
                                 }}
@@ -99,7 +110,7 @@ export default function Users() {
                                 required
                                 fullWidth
                                 variant="outlined"
-                                InputProps={{ style: { height: '40px' }}}
+                                InputProps={{ style: { height: '40px' } }}
                                 InputLabelProps={{
                                     style: {
                                         fontSize: '0.9rem',
@@ -110,42 +121,73 @@ export default function Users() {
                             />
                         </Grid>
 
-                        <Grid item xs={6}>
-                            <FormControl fullWidth>
-                                <InputLabel sx={{ fontSize: '0.9rem', lineHeight: '1rem', paddingRight: 2}} id="select-label">Nível de acesso</InputLabel>
-                                <Select
-                                    labelId="select-label"
-                                    id="select"
-                                    label="Nível de acesso"
-                                    required
-                                    value={selectedRole}
-                                    onChange={handleRoleChange}
-                                    sx={{ height: '40px'}}
-                                >
-                                    {roles.map((role) => (
-                                        <MenuItem key={role.id} value={role.id}>
-                                            {`${role.id} - ${role.access_level}: ${role.description_of_access_level}`}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Grid>
 
-                        {selectedRole === 2 && (
-                            <Grid item xs={6}>
-                                <FormControl fullWidth>
-                                    <InputLabel sx={{ fontSize: '0.9rem', lineHeight: '1rem', paddingRight: 2}} id="select-label">Hotel</InputLabel>
-                                    <Select labelId="select-label" id="select" label="Hotel" sx={{ height: '40px'}}>
-                                        {hotelRegister.map((hotel) => (
-                                            <MenuItem key={hotel.id} value={hotel.id}>
-                                                {hotel.hotel_name}
-                                            </MenuItem>
+                        {selectedHotelId ? (
+                            <>
+                                <Grid item xs={6}>
+                                    <FormControl fullWidth>
+                                        <InputLabel sx={{ fontSize: '0.9rem', lineHeight: '1rem', paddingRight: 2 }} id="select-label">Nível de acesso</InputLabel>
+                                        {roles
+                                        .filter((managerRole) => (managerRole.id) === 2)
+                                        .map((role) => (
+                                            <Select key={role.id} labelId="select-label" id="select" label="Nível de acesso" required value={role.id} onChange={handleRoleChange} sx={{ height: '40px' }}>
+                                                <MenuItem value={role.id}>
+                                                    {`${role.id} - ${role.access_level}: ${role.description_of_access_level}`}
+                                                </MenuItem>
+                                            </Select>
                                         ))}
-                                    </Select>
-                                </FormControl>
-                            </Grid>
-                        )}
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <FormControl fullWidth>
+                                        <InputLabel sx={{ fontSize: '0.9rem', lineHeight: '1rem', paddingRight: 2 }} id="select-label">
+                                            Hotel
+                                        </InputLabel>
+                                        <Select labelId="select-label" id="select" label="Hotel" value={selectedHotelId} sx={{ height: '40px' }}>
+                                            {hotelRegister
+                                                .filter((hotel) => String(hotel.id) === String(selectedHotelId))
+                                                .map((filteredHotel) => (
+                                                    <MenuItem key={filteredHotel.id} value={filteredHotel.id}>
+                                                        {filteredHotel.hotel_name}
+                                                    </MenuItem>
+                                                ))}
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                            </>
+                        ) : (
+                            <>
+                                <Grid item xs={6}>
+                                    <FormControl fullWidth>
+                                        <InputLabel sx={{ fontSize: '0.9rem', lineHeight: '1rem', paddingRight: 2 }} id="select-label">Nível de acesso</InputLabel>
+                                        <Select labelId="select-label" id="select" label="Nível de acesso" required value={selectedRole} onChange={handleRoleChange} sx={{ height: '40px' }}>
+                                            {roles
+                                            .filter((managerRole) => (managerRole.id) === 1)
+                                            .map((role) => (
+                                                <MenuItem key={role.id} value={role.id}>
+                                                    {`${role.id} - ${role.access_level}: ${role.description_of_access_level}`}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
 
+                                {selectedRole === 2 && (
+                                    <Grid item xs={6}>
+                                        <FormControl fullWidth>
+                                            <InputLabel sx={{ fontSize: '0.9rem', lineHeight: '1rem', paddingRight: 2 }} id="select-label">Hotel</InputLabel>
+                                            <Select labelId="select-label" id="select" label="Hotel" onChange={handleHotelChange} value={selectedHotel || ""} sx={{ height: '40px' }}>
+                                                {hotelRegister.map((selectedHotel) => (
+                                                    <MenuItem key={selectedHotel.id} value={selectedHotel.id}>
+                                                        {selectedHotel.hotel_name}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+                                )}
+                            </>
+                        )}
                     </Grid>
                 </Grid>
                 <Box sx={{ display: 'flex', flexDirection: 'row-reverse', mt: 1 }}>
@@ -154,7 +196,33 @@ export default function Users() {
                     </Button>
                 </Box>
             </Paper>
-            Usuários
+
+            <Title Title={'Usuários'} />
+            <>
+                <Paper elevation={3} sx={{ padding: 2 }} >
+                    <Table size="small">
+                        <TableHead>
+                            <TableRow sx={{ background: '#101F33' }}>
+                                <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
+                                   Usuário
+                                </TableCell>
+                                <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
+                                    Entidades
+                                </TableCell>
+                                <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
+                                    CNPJ
+                                </TableCell>
+                                <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
+                                    Perfil
+                                </TableCell>
+                                <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
+                                    Ações
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+                    </Table>
+                </Paper>
+            </>
         </React.Fragment>
     )
 }
