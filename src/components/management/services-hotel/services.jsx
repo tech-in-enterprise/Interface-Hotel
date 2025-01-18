@@ -12,7 +12,8 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import BorderColorIcon from '@mui/icons-material/BorderColor'
 import { useSelector, useDispatch } from 'react-redux'
 import { setSelectedTabLabel } from "../../../redux/slice/menuSlice"
-import { getAllServices } from "../../../redux/slice/departments/serviceSlice"
+import { getAllServices } from "../../../redux/slice/managment/serviceSlice"
+import Title from "../../general-components/title-from-pages"
 
 
 
@@ -38,15 +39,7 @@ export default function ServicesFromDepartments() {
 
     return (
         <React.Fragment>
-            <Table sx={{ width: 'auto' }}>
-                <TableBody>
-                    <TableRow sx={{ background: '#101F33' }}>
-                        <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF', width: '75%' }}>
-                            {selectedDepartment?.name}
-                        </TableCell>
-                    </TableRow>
-                </TableBody>
-            </Table>
+            <Title Title={selectedDepartment?.name}/>
             <Paper elevation={3} sx={{ padding: 2, mt: 2, mb: 2 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <TextField variant="standard" size="medium" sx={{ ml: 0.5 }} fullWidth placeholder={`Associar Novo Serviço à ${selectedDepartment?.name}`} />

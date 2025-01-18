@@ -1,202 +1,90 @@
 import React, { useState, useEffect } from 'react'
-import { Button, TextField, Grid, Box } from '@mui/material'
+import { Alert, Box } from '@mui/material'
 import Paper from '@mui/material/Paper'
-import InputLabel from '@mui/material/InputLabel'
-import MenuItem from '@mui/material/MenuItem'
-import FormControl from '@mui/material/FormControl'
-import Select from '@mui/material/Select'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllRoles } from '../../../redux/slice/roles/roleSlice'
-import { getHotelById } from '../../../redux/slice/admin/register-hotel'
+import { getHotelById } from '../../../redux/slice/managment/profile-info-hotel'
+import { getUsers } from '../../../redux/slice/admin/users'
 import Title from '../../general-components/title-from-pages'
 import Table from '@mui/material/Table'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import TableCell from '@mui/material/TableCell'
-
+import TableBody from '@mui/material/TableBody'
+import Tooltip from '@mui/material/Tooltip'
+import IconButton from '@mui/material/IconButton'
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
+import BorderColorIcon from '@mui/icons-material/BorderColor'
+import AddUsers from './addUser'
 
 
 
 export default function Users() {
 
     const dispatch = useDispatch()
-    const { roles } = useSelector((state) => state.roles)
-    const { hotelRegister } = useSelector((state) => state.hotel)
+    const { users, message, error, loading } = useSelector((state) => state.users)
     const selectedHotelId = useSelector((state) => state.auth.hotel)
 
+    const [visibleMessage, setVisibleMessage] = useState(null)
+    const [visibleError, setVisibleError] = useState(null)
 
     useEffect(() => {
         dispatch(getAllRoles())
         dispatch(getHotelById())
+        dispatch(getUsers())
     }, [dispatch])
 
+    // Exibir mensagem com duração de 5 segundos
+    useEffect(() => {
+        if (message) {
+            setVisibleMessage(message)
+            const timer = setTimeout(() => {
+                setVisibleMessage(null)
+            }, 3000)
+            return () => clearTimeout(timer)
+        }
+        setVisibleMessage('')
+    }, [message, users])
 
-    const [selectedRole, setSelectedRole] = useState('')
-    const handleRoleChange = (event) => {
-        setSelectedRole(event.target.value)
-    }
+    // Exibir erro com duração de 5 segundos
+    useEffect(() => {
+        if (error) {
+            setVisibleError(error)
+            const timer = setTimeout(() => setVisibleError(null), 3000)
+            return () => clearTimeout(timer)
+        }
+        setVisibleError('')
+    }, [error])
 
-    const [selectedHotel, setSelectedHotel] = useState(selectedHotelId || "")
-    const handleHotelChange = (event) => {
-        setSelectedHotel(event.target.value)
-    }
+    // Atualizar os usuários filtrados quando selectedHotelId ou users mudarem
+    const [filteredUsers, setFilteredUsers] = useState([])
+    useEffect(() => {
+        if (selectedHotelId) {
+            const filtered = users.filter((user) => String(user.hotel_id) === String(selectedHotelId))
+            .filter((user) => user.role.access_level !== "Administrador")
+            setFilteredUsers(filtered)
+        } else {
+            setFilteredUsers(users)
+        }
+    }, [selectedHotelId, users])
+
+
+
     return (
         <React.Fragment>
+            {loading && <Alert sx={{ mt: 0, mb: 1 }} severity="info">{message}</Alert>}
+            {visibleError && <Alert sx={{ mt: 0, mb: 1 }} severity="error">{visibleError}</Alert>}
+            {visibleMessage && !loading && !error && (
+                <Alert sx={{ mt: 0, mb: 1 }} severity={visibleMessage.includes('sucesso') ? 'success' : 'info'}>{visibleMessage}</Alert>
+            )}
+            {users.length === 0 && !visibleMessage && !loading && !error && (
+                <Alert sx={{ mt: 0, mb: 1 }} severity="info">Nenhum usuário encontrado</Alert>
+            )}
+            {error && !loading && (
+                <Alert sx={{ mt: 0, mb: 1 }} severity="error">{error}</Alert>
+            )}
             <Title Title={"Gerenciamento de Usuários"} />
-            <Paper elevation={3} sx={{ padding: 2, mt: 2, mb: 2 }}>
-                <Grid item xs={12} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={3}>
-                            <TextField
-                                label="Nome do usuário"
-                                required
-                                fullWidth
-                                variant="outlined"
-                                InputProps={{
-                                    style: { height: '40px', padding: '0' },
-                                }}
-                                InputLabelProps={{
-                                    style: {
-                                        fontSize: '0.9rem',
-                                        lineHeight: '15px',
-                                        paddingRight: 2
-                                    },
-                                }}
-                            />
-                        </Grid>
-                        <Grid item xs={3}>
-                            <TextField
-                                label="E-mail"
-                                required
-                                fullWidth
-                                variant="outlined"
-                                InputProps={{
-                                    style: { height: '40px', padding: '0' },
-                                }}
-                                InputLabelProps={{
-                                    style: {
-                                        fontSize: '0.9rem',
-                                        lineHeight: '15px',
-                                        paddingRight: 2
-                                    },
-                                }}
-                            />
-                        </Grid>
-
-                        <Grid item xs={3}>
-                            <TextField
-                                label="Senha"
-                                type="password"
-                                required
-                                fullWidth
-                                variant="outlined"
-
-                                InputProps={{
-                                    style: { height: '40px', padding: '0' },
-                                }}
-                                InputLabelProps={{
-                                    style: {
-                                        fontSize: '0.9rem',
-                                        lineHeight: '15px',
-                                        paddingRight: 2
-                                    },
-                                }}
-                            />
-                        </Grid>
-                        <Grid item xs={3}>
-                            <TextField
-                                label="Confirmar senha"
-                                type="password"
-                                required
-                                fullWidth
-                                variant="outlined"
-                                InputProps={{ style: { height: '40px' } }}
-                                InputLabelProps={{
-                                    style: {
-                                        fontSize: '0.9rem',
-                                        lineHeight: '15px',
-                                        paddingRight: 2
-                                    },
-                                }}
-                            />
-                        </Grid>
-
-
-                        {selectedHotelId ? (
-                            <>
-                                <Grid item xs={6}>
-                                    <FormControl fullWidth>
-                                        <InputLabel sx={{ fontSize: '0.9rem', lineHeight: '1rem', paddingRight: 2 }} id="select-label">Nível de acesso</InputLabel>
-                                        {roles
-                                        .filter((managerRole) => (managerRole.id) === 2)
-                                        .map((role) => (
-                                            <Select key={role.id} labelId="select-label" id="select" label="Nível de acesso" required value={role.id} onChange={handleRoleChange} sx={{ height: '40px' }}>
-                                                <MenuItem value={role.id}>
-                                                    {`${role.id} - ${role.access_level}: ${role.description_of_access_level}`}
-                                                </MenuItem>
-                                            </Select>
-                                        ))}
-                                    </FormControl>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <FormControl fullWidth>
-                                        <InputLabel sx={{ fontSize: '0.9rem', lineHeight: '1rem', paddingRight: 2 }} id="select-label">
-                                            Hotel
-                                        </InputLabel>
-                                        <Select labelId="select-label" id="select" label="Hotel" value={selectedHotelId} sx={{ height: '40px' }}>
-                                            {hotelRegister
-                                                .filter((hotel) => String(hotel.id) === String(selectedHotelId))
-                                                .map((filteredHotel) => (
-                                                    <MenuItem key={filteredHotel.id} value={filteredHotel.id}>
-                                                        {filteredHotel.hotel_name}
-                                                    </MenuItem>
-                                                ))}
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                            </>
-                        ) : (
-                            <>
-                                <Grid item xs={6}>
-                                    <FormControl fullWidth>
-                                        <InputLabel sx={{ fontSize: '0.9rem', lineHeight: '1rem', paddingRight: 2 }} id="select-label">Nível de acesso</InputLabel>
-                                        <Select labelId="select-label" id="select" label="Nível de acesso" required value={selectedRole} onChange={handleRoleChange} sx={{ height: '40px' }}>
-                                            {roles
-                                            .filter((managerRole) => (managerRole.id) === 1)
-                                            .map((role) => (
-                                                <MenuItem key={role.id} value={role.id}>
-                                                    {`${role.id} - ${role.access_level}: ${role.description_of_access_level}`}
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-
-                                {selectedRole === 2 && (
-                                    <Grid item xs={6}>
-                                        <FormControl fullWidth>
-                                            <InputLabel sx={{ fontSize: '0.9rem', lineHeight: '1rem', paddingRight: 2 }} id="select-label">Hotel</InputLabel>
-                                            <Select labelId="select-label" id="select" label="Hotel" onChange={handleHotelChange} value={selectedHotel || ""} sx={{ height: '40px' }}>
-                                                {hotelRegister.map((selectedHotel) => (
-                                                    <MenuItem key={selectedHotel.id} value={selectedHotel.id}>
-                                                        {selectedHotel.hotel_name}
-                                                    </MenuItem>
-                                                ))}
-                                            </Select>
-                                        </FormControl>
-                                    </Grid>
-                                )}
-                            </>
-                        )}
-                    </Grid>
-                </Grid>
-                <Box sx={{ display: 'flex', flexDirection: 'row-reverse', mt: 1 }}>
-                    <Button variant="contained" color="primary" sx={{ fontSize: '0.8rem', padding: '6px 12px', textTransform: 'none' }}>
-                        Salvar
-                    </Button>
-                </Box>
-            </Paper>
-
+            <AddUsers />
             <Title Title={'Usuários'} />
             <>
                 <Paper elevation={3} sx={{ padding: 2 }} >
@@ -204,7 +92,7 @@ export default function Users() {
                         <TableHead>
                             <TableRow sx={{ background: '#101F33' }}>
                                 <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
-                                   Usuário
+                                    Usuário
                                 </TableCell>
                                 <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
                                     Entidades
@@ -220,6 +108,37 @@ export default function Users() {
                                 </TableCell>
                             </TableRow>
                         </TableHead>
+                        <TableBody>
+                            {filteredUsers.map((user) => (
+                                <TableRow sx={{ background: '#FFF' }} key={user.id}>
+                                    <TableCell sx={{ justifyContent: 'space-around', fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
+                                        <Box>{user.email}</Box>
+                                    </TableCell>
+                                    <TableCell sx={{ justifyContent: 'space-around', fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
+                                        <Box>{user.hotel?.registered_name || 'N/A'}</Box>
+                                    </TableCell>
+                                    <TableCell sx={{ justifyContent: 'space-around', fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
+                                        <Box>{user.hotel?.cnpj || 'N/A'}</Box>
+                                    </TableCell>
+                                    <TableCell sx={{ justifyContent: 'space-around', fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
+                                        <Box>{user.role.access_level}</Box>
+                                    </TableCell>
+                                    <TableCell sx={{ fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>
+                                        <Tooltip title="Editar Usuário">
+                                            <IconButton>
+                                                <BorderColorIcon style={{ fontSize: '1rem' }} />
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip title="Deletar Usuário">
+                                            <IconButton onClick={() => handleDeleteDepartment(department.id)}>
+                                                <DeleteForeverIcon style={{ fontSize: '1rem' }} />
+                                            </IconButton>
+                                        </Tooltip>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+
+                        </TableBody>
                     </Table>
                 </Paper>
             </>

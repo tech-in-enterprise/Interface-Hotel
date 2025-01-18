@@ -13,11 +13,12 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import BorderColorIcon from '@mui/icons-material/BorderColor'
 import Alert from '@mui/material/Alert'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllDepartments, createDepartment, deleteDepartment, setSelectedDepartment } from '../../../redux/slice/departments/departmentSlice'
+import { getAllDepartments, createDepartment, deleteDepartment, setSelectedDepartment } from '../../../redux/slice/managment/departments'
 import { setSelectedTabLabel } from '../../../redux/slice/menuSlice'
 import LocationCityIcon from '@mui/icons-material/LocationCity'
 import Skeleton from '@mui/material/Skeleton'
 import Title from '../../general-components/title-from-pages'
+import { useNavigate } from 'react-router-dom'
 
 
 
@@ -26,6 +27,8 @@ import Title from '../../general-components/title-from-pages'
 
 export default function Department() {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const selectedHotelId = useSelector((state) => state.auth.hotel)
     const { departments, message, error, loading } = useSelector((state) => state.departments)
 
     const [newDepartment, setNewDepartment] = useState('')
@@ -77,6 +80,7 @@ export default function Department() {
     const showComponentService = (department) => {
         dispatch(setSelectedDepartment(department))
         dispatch(setSelectedTabLabel('Serviços'))
+        navigate(selectedHotelId ? `/admin/departamento/servicos/${selectedHotelId}` : '/departamento/servicos')
     }
 
     return (

@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux'
 // ícones e nomes que estão no menu lateral
 export const getCategories = (departments = []) => {
   const selectedHotelId = useSelector((state) => state.auth.hotel)
+  const { departmentss } = useSelector((state) => state.departments)
 
   return [
 
@@ -28,9 +29,9 @@ export const getCategories = (departments = []) => {
       name: 'Gerenciamento',
       role: ['Administrador', 'Gerente'],
       children: [
-        { id: 202, name: 'Cadastro', icon: <FaRegIdCard style={{ fontSize: '1rem', color: '#FFF' }} /> },
-        { id: 203, name: 'Departamentos', icon: <GroupsIcon style={{ fontSize: '1rem', color: '#FFF' }} /> },
-        { id: 204, name: 'Escala', icon: <PermContactCalendarIcon style={{ fontSize: '1rem', color: '#FFF' }} /> }
+        { id: 202, name: 'Hotel', icon: <FaRegIdCard style={{ fontSize: '1rem', color: '#FFF' }}/>, path: selectedHotelId  ?  `/admin/hotel/${selectedHotelId}` : '/hotel' },
+        { id: 203, name: 'Departamentos', icon: <GroupsIcon style={{ fontSize: '1rem', color: '#FFF' }} /> , path: selectedHotelId  ?  `/admin/departamentos/${selectedHotelId}` : '/departamentos'},
+        { id: 204, name: 'Escala', icon: <PermContactCalendarIcon style={{ fontSize: '1rem', color: '#FFF' }}/>, path: selectedHotelId  ?  `/admin/escala/${selectedHotelId}` : '/escala' }
       ]
     },
     ...(departments.length > 0
@@ -40,6 +41,7 @@ export const getCategories = (departments = []) => {
         children: departments.map(department => ({
           id: department.id,
           name: department.name,
+          path: selectedHotelId  ?  `/admin/setores/${department.id}/${selectedHotelId}` : `/setores/${department.id}`, 
         }))
       }]
       : []),
@@ -47,8 +49,8 @@ export const getCategories = (departments = []) => {
       name: 'Manutenção de Contas',
       role: ['Administrador', 'Gerente'],
       children: [
-        { id: 301, name: 'Contas', icon: <FolderSharedIcon style={{ fontSize: '1rem', color: '#FFF' }} /> },
-        { id: 302, name: 'Relatórios', icon: <AiOutlineBarChart /> },
+        { id: 301, name: 'Contas', icon: <FolderSharedIcon style={{ fontSize: '1rem', color: '#FFF' }}/>, path: selectedHotelId  ?  `/admin/contas/${selectedHotelId}` : '/contas' },
+        { id: 302, name: 'Relatórios', icon: <AiOutlineBarChart />, path: selectedHotelId  ?  `/admin/relatorios/${selectedHotelId}` : '/relatorios' },
       ],
     },
   ]

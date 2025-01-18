@@ -18,8 +18,8 @@ export default function SignIn() {
 
 
     const dispatch = useDispatch()
-    const { loading, error } = useSelector((state) => state.auth)
     const navigate = useNavigate()
+    const { loading, error } = useSelector((state) => state.auth)
 
     // Validar campos de email e senha
     const frontendValidation = () => {

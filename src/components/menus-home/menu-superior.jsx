@@ -16,6 +16,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { setSelectedTabLabel } from '../../redux/slice/menuSlice'
 import { handleLogout } from '../auth/sign-out'
 import { useNavigate } from 'react-router-dom'
+import { getCategories } from './utils-menu-lateral/categories-menu-lateral'
 
 
 
@@ -25,11 +26,16 @@ export default function MenuSuperior({ handleClick, newTicket }) { // propriedad
   const [value, setValue] = useState(null)
   //utilizando redux para disparar os novos estados (item do menu que foi clicado e enviar para store)
   const itemName = useSelector((state) => state.menu.itemName)
+  const hotelName = useSelector((state) => state.menu.hotelName)
   const selectedTabLabel = useSelector((state) => state.menu.selectedTabLabel)
+
+
+  const { departments } = useSelector((state) => state.departments)
+  const isItemInDepartments = departments.some((department) => department.name === itemName)
 
   const { user } = useSelector((state) => state.auth)
   const dispatch = useDispatch()
-  const navigate = useNavigate() 
+  const navigate = useNavigate()
 
   useEffect(() => {
     setValue(null)
@@ -65,20 +71,19 @@ export default function MenuSuperior({ handleClick, newTicket }) { // propriedad
   const dataFormatada = `${dia}/${mes}/${ano}`
 
 
-
   return (
     <React.Fragment>
       <AppBar color="primary" position="relative" elevation={0} sx={{ background: '#101F33' }} >
         <Toolbar>
-          <Grid container spacing={1} alignItems="center" sx={{ fontSize:  '0.9rem'}}>
+          <Grid container spacing={1} alignItems="center" sx={{ fontSize: '0.9rem' }}>
             <Grid sx={{ display: { sm: 'none', xs: 'block' } }} item>
               <IconButton color="inherit" aria-label="open drawer" edge="start">
                 <MenuIcon />
               </IconButton>
             </Grid>
             <Grid item xs>
-              <Typography color="inherit"  sx={{ fontSize: '0.9rem'  }}>
-                {itemName} {selectedTabLabel && ` | ${selectedTabLabel}`}
+              <Typography color="inherit" sx={{ fontSize: '0.9rem' }}>
+                {hotelName && `${hotelName} |`} {itemName} {selectedTabLabel && ` | ${selectedTabLabel}`}
               </Typography>
             </Grid>
             <Grid item xs />
@@ -86,58 +91,63 @@ export default function MenuSuperior({ handleClick, newTicket }) { // propriedad
               <CalendarMonthIcon style={{ fontSize: '1rem' }} sx={{ mr: 1 }} />
               {dataFormatada}
             </Grid>
-            <Grid item sx={{ fontSize: '0.9rem'  }}>
+            <Grid item sx={{ fontSize: '0.9rem' }}>
               {user}
             </Grid>
             <Grid item>
-              <IconButton onClick={() => handleLogout(dispatch, navigate)} color="inherit" sx={{ fontSize: '0.9rem'  }}>
+              <IconButton onClick={() => handleLogout(dispatch, navigate)} color="inherit" sx={{ fontSize: '0.9rem' }}>
                 sair
               </IconButton>
             </Grid>
           </Grid>
         </Toolbar>
       </AppBar>
-      <AppBar component="div" color="primary" position="relative" elevation={0} sx={{ zIndex: 0, background: '#101F33' }}>
-        <Toolbar>
-          <Grid container alignItems="center" spacing={1}>
-            <Grid item xs>
-              {itemName && !["Home", 'Entidades', 'Usuários', 'Cadastro', "Departamentos", "Escala", "Contas", "Novo Chamado"].includes(itemName) && (
-                <Tabs value={value !== null ? value : false} onChange={handleChange}>
-                  {tabs.map((tab) => (
-                    <Tab key={tab.key} sx={{ textTransform: 'none', color: '#606060', '&.Mui-selected': { color: '#FFF' } }} value={tab.value} label={tab.label}/>
-                  ))}
-                </Tabs>
-              )}
-            </Grid>
-            <Grid item>
-              <Box display='flex' alignItems="center" sx={{ cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }} onClick={handleClick} >
-                {newTicket ? (
-                  <React.Fragment>
-                    <IconButton color="inherit">
-                      <CloseIcon style={{ fontSize: '1rem', color: 'red' }} />
-                    </IconButton>
-                    <Typography sx={{ fontSize: '0.9rem'  }}>
-                      Fechar Chamado
-                    </Typography>
-                  </React.Fragment>
-                ) : (
-                  <React.Fragment>
-                    <Tooltip title="Editar Departamento">
-                      <IconButton color='inherit'>
-                        <AddCircleOutlineIcon style={{ fontSize: 18 }} />
-                      </IconButton>
-                    </Tooltip>
-                    <Typography sx={{ fontSize: '0.9rem'  }}>
-                      Novo Chamado
-                    </Typography>
-                  </React.Fragment>
-                )}
 
-              </Box>
+
+      {(isItemInDepartments || itemName === 'Relatórios') && (
+        <AppBar component="div" color="primary" position="relative" elevation={0} sx={{ zIndex: 0, background: '#101F33' }}>
+          <Toolbar>
+            <Grid container alignItems="center" spacing={1}>
+              <Grid item xs>
+                {itemName && !["Home", 'Entidades', 'Usuários', 'Cadastro', "Departamentos", "Escala", "Contas", "Novo Chamado"].includes(itemName) && (
+                  <Tabs value={value !== null ? value : false} onChange={handleChange}>
+                    {tabs.map((tab) => (
+                      <Tab key={tab.key} sx={{ textTransform: 'none', color: '#606060', '&.Mui-selected': { color: '#FFF' } }} value={tab.value} label={tab.label} />
+                    ))}
+                  </Tabs>
+                )}
+              </Grid>
+              <Grid item>
+                <Box display='flex' alignItems="center" sx={{ cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }} onClick={handleClick} >
+                  {newTicket ? (
+                    <React.Fragment>
+                      <IconButton color="inherit">
+                        <CloseIcon style={{ fontSize: '1rem', color: 'red' }} />
+                      </IconButton>
+                      <Typography sx={{ fontSize: '0.9rem' }}>
+                        Fechar Chamado
+                      </Typography>
+                    </React.Fragment>
+                  ) : (
+                    <React.Fragment>
+                      <Tooltip title="Editar Departamento">
+                        <IconButton color='inherit'>
+                          <AddCircleOutlineIcon style={{ fontSize: 18 }} />
+                        </IconButton>
+                      </Tooltip>
+                      <Typography sx={{ fontSize: '0.9rem' }}>
+                        Novo Chamado
+                      </Typography>
+                    </React.Fragment>
+                  )}
+
+                </Box>
+              </Grid>
             </Grid>
-          </Grid>
-        </Toolbar>
-      </AppBar>
+          </Toolbar>
+        </AppBar>
+
+      )}
     </React.Fragment>
   )
 }

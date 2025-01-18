@@ -12,7 +12,7 @@ import HomeIcon from '@mui/icons-material/Home'
 import { Typography } from '@mui/material'
 import { setItemName, setSelectedTabLabel } from '../../redux/slice/menuSlice'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllDepartments } from '../../redux/slice/departments/departments'
+import { getAllDepartments } from '../../redux/slice/managment/departments'
 import { getCategories } from './utils-menu-lateral/categories-menu-lateral'
 import { filterCategories } from './utils-menu-lateral/filterCategories'
 import { useNavigate } from 'react-router-dom'
@@ -27,6 +27,7 @@ export default function MenuLateral() {
   const [activeItem, setActiveItem] = useState(Number(localStorage.getItem('activeMenuItem')) || 0)
   const { role, hotel } = useSelector((state) => state.auth)
   const { departments } = useSelector((state) => state.departments)
+
 
 
   //reenderiza todos os departamentos vindo do redux e banco de dados

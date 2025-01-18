@@ -7,14 +7,16 @@ import TableRow from '@mui/material/TableRow'
 import TableCell from '@mui/material/TableCell'
 import Paper from '@mui/material/Paper'
 import { useDispatch, useSelector } from 'react-redux'
-import { getHotelById } from '../../../redux/slice/admin/register-hotel'
+import { getHotelById } from '../../../redux/slice/managment/profile-info-hotel'
 import Alert from '@mui/material/Alert'
 import Skeleton from '@mui/material/Skeleton'
 import Title from '../../general-components/title-from-pages'
-import { setHotel, clearHotel } from '../../../redux/slice/auth/loginSlice'
+import { clearHotel, setHotel } from '../../../redux/slice/auth/loginSlice'
+import { removeHotelFromUser, updateHotelId } from '../../../redux/slice/admin/users'
 import { useNavigate } from 'react-router-dom'
 import FilterEntities from './filter-entities'
 import AddEntities from './add-entities'
+import { setHotelName } from '../../../redux/slice/menuSlice'
 
 
 
@@ -23,11 +25,36 @@ export default function AllEntities() {
 
     const [addEntity, setAddEntity] = useState(false)
     const [filteredEntities, setFilteredEntities] = useState(null)
+    const [visibleMessage, setVisibleMessage] = useState(null)
+    const [visibleError, setVisibleError] = useState(null)
+    
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const selectedHotelId = useSelector((state) => state.auth.hotel)
+    const { hotelProfileById, loading, message, error  } = useSelector((state) => state.hotelProfileById)
 
-    const selectedHotel = useSelector((state) => state.auth.hotel)
-    const { hotelRegister, loading, message, error } = useSelector((state) => state.hotel)
+
+    // Exibir mensagem com duração de 5 segundos
+    useEffect(() => {
+        if (message) {
+            setVisibleMessage(message)
+            const timer = setTimeout(() => {
+                setVisibleMessage(null)
+            }, 3000)
+            return () => clearTimeout(timer)
+        }
+        setVisibleMessage('')
+    }, [message, hotelProfileById])
+
+    // Exibir erro com duração de 5 segundos
+    useEffect(() => {
+        if (error) {
+            setVisibleError(error)
+            const timer = setTimeout(() => setVisibleError(null), 3000)
+            return () => clearTimeout(timer)
+        }
+        setVisibleError('')
+    }, [error])
 
     //adiciona e pesquisa de entidades 
     const handleAddEntity = () => {
@@ -38,52 +65,61 @@ export default function AllEntities() {
         setAddEntity(false)
     }
 
-    // Retorna todos as entidades criadas
+
+    // Retorna todos as entidades criadas e usuários atualizados
     useEffect(() => {
         dispatch(getHotelById())
     }, [dispatch])
 
     // Restaurar a entidade filtrada do cookie ao carregar a página
     useEffect(() => {
-        if (selectedHotel && hotelRegister.length > 0) {
-            const selectedEntity = hotelRegister.find((entity) => String(entity.id) === String(selectedHotel))
+        if (selectedHotelId && hotelProfileById.length > 0) {
+            const selectedEntity = hotelProfileById.find((entity) => String(entity.id) === String(selectedHotelId))
             if (selectedEntity) {
                 setFilteredEntities([selectedEntity])
-                dispatch(setHotel(selectedHotel))
+                dispatch(setHotel(selectedHotelId))
             }
         }
-    }, [dispatch, hotelRegister])
+    }, [dispatch, hotelProfileById])
 
-
-
-    //associa o id do hotel selecionado ao atributo hotel do admin (para o admin poder acessar o hotel selecionado em entidades)
-    // Acessar uma entidade específica
-    const handleAccessEntity = (hotel_id) => {
-        const selectedEntity = hotelRegister.find((entity) => entity.id === hotel_id)
+    // Associa o id do hotel selecionado ao atributo hotel do admin
+    const handleAccessEntity = async (hotel_id) => {
+        const selectedEntity = hotelProfileById.find((entity) => entity.id === hotel_id)
         if (selectedEntity) {
+            dispatch(updateHotelId({ hotel_id }))
             dispatch(setHotel(hotel_id))
             setFilteredEntities([selectedEntity])
             navigate(`/admin/entidades/${hotel_id}`)
+            dispatch(setHotelName([selectedEntity.hotel_name]))
         }
     }
 
     // Sair da entidade selecionada
     const handleExitEntity = () => {
-        setFilteredEntities(null)
         dispatch(clearHotel())
+        dispatch(removeHotelFromUser())
+        setFilteredEntities(null)
         navigate('/admin/entidades')
+        dispatch(setHotelName(''))
     }
 
     return (
         <React.Fragment>
             {/* Mostrar mensagens */}
             {loading && <Alert sx={{ mt: 0, mb: 1 }} severity="info">{message}</Alert>}
+            {visibleError && <Alert sx={{ mt: 0, mb: 1 }} severity="error">{visibleError}</Alert>}
+            {visibleMessage && !loading && !error && (
+                <Alert sx={{ mt: 0, mb: 1 }} severity={visibleMessage.includes('sucesso') ? 'success' : 'info'}>{visibleMessage}</Alert>
+            )}
+            {hotelProfileById.length === 0 && !visibleMessage && !loading && !error && (
+                <Alert sx={{ mt: 0, mb: 1 }} severity="info">Você não possui entidades criadas.</Alert>
+            )}
             {error && !loading && (
                 <Alert sx={{ mt: 0, mb: 1 }} severity="error">{error}</Alert>
             )}
 
             <Title Title={'Gerenciamento de Entidades'} />
-            <Paper elevation={3} sx={{ padding: 2, mt: 2 }}>
+            <Paper elevation={3} sx={{ padding: 2, mt: 2, mb:2 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', mt: 2 }}>
                     {addEntity ? (
                         <AddEntities handleSearch={handleSearch} />
@@ -146,7 +182,7 @@ export default function AllEntities() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {(filteredEntities || hotelRegister).map((entity) => (
+                                {(filteredEntities || hotelProfileById).map((entity) => (
                                     <TableRow sx={{ background: '#FFF' }} key={entity.id}>
                                         <TableCell sx={{ justifyContent: 'space-around', fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
                                             <Box>{entity.registered_name}</Box>
@@ -162,7 +198,8 @@ export default function AllEntities() {
                                         </TableCell>
 
                                         <TableCell sx={{ justifyContent: 'space-around', fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
-                                            {String(selectedHotel) === String(entity.id) ? (
+
+                                            {String(selectedHotelId) === String(entity.id) ? (
                                                 <Button variant="contained" color="primary" sx={{ fontSize: '0.8rem', textTransform: 'none' }} onClick={handleExitEntity}>
                                                     Sair
                                                 </Button>

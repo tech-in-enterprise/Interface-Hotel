@@ -10,11 +10,14 @@ const menuSlice = createSlice({
         setItemName: (state, action) => {
             state.itemName = action.payload
         },
+        setHotelName: (state, action) => {
+            state.hotelName = action.payload
+        },
         setSelectedTabLabel: (state, action) => {
             state.selectedTabLabel = action.payload
         },
     },
 })
 
-export const { setItemName, setSelectedTabLabel } =  menuSlice.actions
+export const { setItemName, setHotelName, setSelectedTabLabel } =  menuSlice.actions
 export default menuSlice.reducer
