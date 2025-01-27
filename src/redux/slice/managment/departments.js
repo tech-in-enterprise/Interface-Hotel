@@ -1,12 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import axios from 'axios'
+import Cookies from 'js-cookie'
+import { api } from '../../api/api'
 
 // Thunk para buscar departamentos
 export const getAllDepartments = createAsyncThunk(
   'departments/getAllDepartments',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('http://localhost:8000/departments')
+      const response = await api.get('/departments')
       return response.data
     } catch (error) {
       return rejectWithValue('Erro ao retornar departamentos. Verifique sua conexão.')
@@ -19,7 +20,7 @@ export const createDepartment = createAsyncThunk(
   'departments/createDepartment',
   async (newDepartment, { rejectWithValue }) => {
     try {
-      const response = await axios.post('http://localhost:8000/departments', newDepartment)
+      const response = await api.post('/departments', newDepartment)
       return response.data
     } catch (error) {
       return rejectWithValue('Erro ao criar Departamento. Verifique os dados e tente novamente.')
@@ -32,10 +33,10 @@ export const deleteDepartment = createAsyncThunk(
   'departments/deleteDepartment',
   async (department_id, { rejectWithValue }) => {
     try {
-      await axios.delete(`http://localhost:8000/departments/${department_id}`)
+      await api.delete(`/departments/${department_id}`)
       return department_id
     } catch (error) {
-      return rejectWithValue('Erro ao deletar Departamento. Verifique sua conexão.')
+      return rejectWithValue('Existe serviços associados ao departamento. Para deletar os departamentos, exclua os serviços')
     }
   }
 )
@@ -45,7 +46,7 @@ const departmentSlice = createSlice({
   initialState: {
     loading: false,
     departments: [],
-    selectedDepartment: '',
+    selectedDepartment: Cookies.get('selectedDepartment') ? JSON.parse(Cookies.get('selectedDepartment')) : '',
     error: '',
     message: '',
   },
@@ -53,6 +54,7 @@ const departmentSlice = createSlice({
     // Armazena o nome do departamento para ser usado em serviços
     setSelectedDepartment: (state, action) => {
       state.selectedDepartment = action.payload
+      Cookies.set('selectedDepartment', JSON.stringify(action.payload), { expires: 7 })
     },
   },
   extraReducers: (builder) => {

@@ -61,7 +61,7 @@ export default function Users() {
     useEffect(() => {
         if (selectedHotelId) {
             const filtered = users.filter((user) => String(user.hotel_id) === String(selectedHotelId))
-            .filter((user) => user.role.access_level !== "Administrador")
+                .filter((user) => user.role.access_level !== "Administrador")
             setFilteredUsers(filtered)
         } else {
             setFilteredUsers(users)
@@ -77,71 +77,73 @@ export default function Users() {
             {visibleMessage && !loading && !error && (
                 <Alert sx={{ mt: 0, mb: 1 }} severity={visibleMessage.includes('sucesso') ? 'success' : 'info'}>{visibleMessage}</Alert>
             )}
-            {users.length === 0 && !visibleMessage && !loading && !error && (
-                <Alert sx={{ mt: 0, mb: 1 }} severity="info">Nenhum usuário encontrado</Alert>
+            {filteredUsers.length === 0 && !visibleMessage && !loading && !error && (
+                <Alert sx={{ mt: 0, mb: 1 }} severity="info">Nenhum usuário encontrado para essa Entidade</Alert>
             )}
             {error && !loading && (
                 <Alert sx={{ mt: 0, mb: 1 }} severity="error">{error}</Alert>
             )}
             <Title Title={"Gerenciamento de Usuários"} />
             <AddUsers />
-            <Title Title={'Usuários'} />
-            <>
-                <Paper elevation={3} sx={{ padding: 2 }} >
-                    <Table size="small">
-                        <TableHead>
-                            <TableRow sx={{ background: '#101F33' }}>
-                                <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
-                                    Usuário
-                                </TableCell>
-                                <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
-                                    Entidades
-                                </TableCell>
-                                <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
-                                    CNPJ
-                                </TableCell>
-                                <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
-                                    Perfil
-                                </TableCell>
-                                <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
-                                    Ações
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {filteredUsers.map((user) => (
-                                <TableRow sx={{ background: '#FFF' }} key={user.id}>
-                                    <TableCell sx={{ justifyContent: 'space-around', fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
-                                        <Box>{user.email}</Box>
+            {filteredUsers.length > 0 && (
+                <>
+                    <Title Title={'Usuários'} />
+                    <Paper elevation={3} sx={{ padding: 2 }} >
+                        <Table size="small">
+                            <TableHead>
+                                <TableRow sx={{ background: '#101F33' }}>
+                                    <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
+                                        Usuário
                                     </TableCell>
-                                    <TableCell sx={{ justifyContent: 'space-around', fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
-                                        <Box>{user.hotel?.registered_name || 'N/A'}</Box>
+                                    <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
+                                        Entidades
                                     </TableCell>
-                                    <TableCell sx={{ justifyContent: 'space-around', fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
-                                        <Box>{user.hotel?.cnpj || 'N/A'}</Box>
+                                    <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
+                                        CNPJ
                                     </TableCell>
-                                    <TableCell sx={{ justifyContent: 'space-around', fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
-                                        <Box>{user.role.access_level}</Box>
+                                    <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
+                                        Perfil
                                     </TableCell>
-                                    <TableCell sx={{ fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>
-                                        <Tooltip title="Editar Usuário">
-                                            <IconButton>
-                                                <BorderColorIcon style={{ fontSize: '1rem' }} />
-                                            </IconButton>
-                                        </Tooltip>
-                                        <Tooltip title="Deletar Usuário">
-                                            <IconButton onClick={() => handleDeleteDepartment(department.id)}>
-                                                <DeleteForeverIcon style={{ fontSize: '1rem' }} />
-                                            </IconButton>
-                                        </Tooltip>
+                                    <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
+                                        Ações
                                     </TableCell>
                                 </TableRow>
-                            ))}
+                            </TableHead>
+                            <TableBody>
+                                {filteredUsers.map((user) => (
+                                    <TableRow sx={{ background: '#FFF' }} key={user.id}>
+                                        <TableCell sx={{ justifyContent: 'space-around', fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
+                                            <Box>{user.email}</Box>
+                                        </TableCell>
+                                        <TableCell sx={{ justifyContent: 'space-around', fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
+                                            <Box>{user.hotel?.registered_name || 'N/A'}</Box>
+                                        </TableCell>
+                                        <TableCell sx={{ justifyContent: 'space-around', fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
+                                            <Box>{user.hotel?.cnpj || 'N/A'}</Box>
+                                        </TableCell>
+                                        <TableCell sx={{ justifyContent: 'space-around', fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
+                                            <Box>{user.role.access_level}</Box>
+                                        </TableCell>
+                                        <TableCell sx={{ fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>
+                                            <Tooltip title="Editar Usuário">
+                                                <IconButton>
+                                                    <BorderColorIcon style={{ fontSize: '1rem' }} />
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title="Deletar Usuário">
+                                                <IconButton onClick={() => handleDeleteDepartment(department.id)}>
+                                                    <DeleteForeverIcon style={{ fontSize: '1rem' }} />
+                                                </IconButton>
+                                            </Tooltip>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
 
-                        </TableBody>
-                    </Table>
-                </Paper>
-            </>
+                            </TableBody>
+                        </Table>
+                    </Paper>
+                </>
+            )}
         </React.Fragment>
     )
 }

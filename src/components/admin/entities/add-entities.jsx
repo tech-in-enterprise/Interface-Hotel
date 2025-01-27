@@ -20,8 +20,8 @@ export default function AddEntities({ handleSearch }) {
     const [errors, setErrors] = useState({})
 
     const fields = [
-        { name: 'hotel_name', label: 'Nome do Hotel', xs: 6, required: true },
-        { name: 'registered_name', label: 'Nome Fantasia', xs: 3, required: true },
+        { name: 'hotel_name', label: 'Nome do hotel', xs: 6, required: true },
+        { name: 'registered_name', label: 'Nome fantasia', xs: 3, required: true },
         { name: 'cnpj', label: 'CNPJ', xs: 3, required: true },
         { name: 'phone_number', label: 'Telefone', xs: 3, required: true },
         { name: 'hotel_email', label: 'E-mail', xs: 3, required: true },
