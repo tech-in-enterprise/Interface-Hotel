@@ -16,7 +16,7 @@ const chamados = [
 
 export default function ChamadosAbertos() {
   const selectedTabLabel = useSelector((state) => state.menu.selectedTabLabel)
-  
+
   return (
     <React.Fragment>
       <Paper elevation={3} sx={{ padding: 2 }}>
@@ -51,7 +51,9 @@ export default function ChamadosAbertos() {
                     {chamado.tempo}
                   </TableCell>
                   <TableCell sx={{ fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>
-                    <Button variant='contained' sx={{ fontSize: '0.8rem', padding: '4px 8px', minWidth: '80px' }}>atender</Button>
+                    <Button variant="contained" color="primary" sx={{ fontSize: '0.8rem', textTransform: 'none' }}>
+                      Atender
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}

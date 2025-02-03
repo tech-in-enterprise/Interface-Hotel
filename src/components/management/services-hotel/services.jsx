@@ -14,7 +14,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { setSelectedTabLabel } from "../../../redux/slice/menuSlice"
 import Title from "../../general-components/title-from-pages"
 import AddService from "./addService"
-import { getAllServices } from "../../../redux/slice/managment/serviceSlice"
+import { getAllServices, deleteService } from "../../../redux/slice/managment/serviceSlice"
 import AlertMessages from "../../general-components/alert-messages"
 import { useNavigate } from 'react-router-dom'
 
@@ -32,30 +32,38 @@ export default function ServicesFromDepartments() {
         navigate(selectedHotelId ? `/admin/departamentos/${selectedHotelId}` : '/departamentos')
         dispatch(setSelectedTabLabel(''))
     }
-
-    // Não use useState para armazenar o filtro
-    const [filteredServiceHotelById, setFilteredServiceHotelById] = useState([])
+    // Retorna todos os serviços criados
     useEffect(() => {
-        const filtered = services.filter((service) => String(service.department_id) === String(selectedDepartment.id))
-        setFilteredServiceHotelById(filtered)
-    }, [services])
-
+        dispatch(getAllServices())
+    }, [dispatch])
+    // Filtro referente aos serviços respectivos do hotel
+    const filteredServices = services.filter(
+        (service) => String(service.department_id) === String(selectedDepartment?.id)
+    )
+    
+    // Deletar departamento
+        const handleDeleteService = (departmentId) => {
+            dispatch(deleteService(departmentId))
+        }
 
 
     return (
         <React.Fragment>
             {/* Mostrar mensagens */}
-            <AlertMessages filtroMap={filteredServiceHotelById} error={error} loading={loading} message={message} stateFromRedux={services} infoMessage={'Esse departamento não possui serviços criados.'} />
+            <AlertMessages filtroMap={filteredServices} error={error} loading={loading} message={message} stateFromRedux={services} infoMessage={'Esse departamento não possui serviços criados.'} />
             <Title Title={selectedDepartment?.name} />
             <AddService />
-            {filteredServiceHotelById.length > 0 ? (
+            {filteredServices.length > 0 ? (
                 <>
                     <Paper elevation={3} sx={{ padding: 2 }}>
                         <Table size="small">
                             <TableHead>
                                 <TableRow sx={{ background: '#101F33' }}>
-                                    <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF', width: '75%' }}>
+                                    <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF', width: '50%' }}>
                                         Serviços
+                                    </TableCell>
+                                    <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF', width: '25%' }}>
+                                        Horários
                                     </TableCell>
                                     <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
                                         Ações
@@ -63,10 +71,13 @@ export default function ServicesFromDepartments() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {filteredServiceHotelById.map((service) => (
+                                {filteredServices.map((service) => (
                                     <TableRow key={service.id} sx={{ background: '#FFF' }}>
                                         <TableCell sx={{ fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>
                                             {service?.name}
+                                        </TableCell>
+                                        <TableCell sx={{ fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>
+                                            24 horas
                                         </TableCell>
                                         <TableCell sx={{ fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>
                                             <Tooltip title="Editar Serviço">
@@ -75,8 +86,8 @@ export default function ServicesFromDepartments() {
                                                 </IconButton>
                                             </Tooltip>
                                             <Tooltip title="Deletar Serviço">
-                                                <IconButton>
-                                                    <DeleteForeverIcon style={{ fontSize: '1rem' }} />
+                                                <IconButton onClick={() => handleDeleteService(service.id)}>
+                                                    <DeleteForeverIcon style={{ fontSize: '1rem' }}/>
                                                 </IconButton>
                                             </Tooltip>
                                         </TableCell>

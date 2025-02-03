@@ -42,7 +42,6 @@ export const getCategories = (departments = []) => {
       children: [
         { id: 202, name: 'Hotel', icon: <FaRegIdCard style={{ fontSize: '1rem', color: '#FFF' }} />, path: selectedHotelId ? `/admin/hotel/${selectedHotelId}` : '/hotel' },
         { id: 203, name: 'Departamentos', icon: <GroupsIcon style={{ fontSize: '1rem', color: '#FFF' }} />, path: selectedHotelId ? `/admin/departamentos/${selectedHotelId}` : '/departamentos' },
-        { id: 204, name: 'Escala', icon: <PermContactCalendarIcon style={{ fontSize: '1rem', color: '#FFF' }} />, path: selectedHotelId ? `/admin/escala/${selectedHotelId}` : '/escala' }
       ]
     },
     ...(filteredDepartmentsHotelById.length > 0

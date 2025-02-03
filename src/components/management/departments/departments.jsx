@@ -83,8 +83,11 @@ export default function Department() {
                     <Table size="small">
                         <TableHead>
                             <TableRow sx={{ background: '#101F33' }}>
-                                <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF', width: '75%' }}>
+                                <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF', width: '50%' }}>
                                     Departamentos
+                                </TableCell>
+                                <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF', width: '25%' }}>
+                                    Horários
                                 </TableCell>
                                 <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
                                     Ações
@@ -96,6 +99,9 @@ export default function Department() {
                                 <TableRow key={department.id} sx={{ background: '#FFF' }}>
                                     <TableCell sx={{ fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
                                         {department.name}
+                                    </TableCell>
+                                    <TableCell sx={{ fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
+                                        24 horas
                                     </TableCell>
                                     <TableCell sx={{ fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>
                                         <Tooltip title="Adicionar Serviços">

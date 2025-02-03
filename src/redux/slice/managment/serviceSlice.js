@@ -33,8 +33,8 @@ export const deleteService = createAsyncThunk(
     'services/deleteService',
     async(service_id, {rejectWithValue}) => {
         try{
-            const response = await api.delete('/services', service_id)
-            return response.data
+            await api.delete(`/services/${service_id}`)
+            return service_id
         }catch(error){
             return rejectWithValue('Erro ao deletar serviço')
         }
@@ -77,7 +77,7 @@ const serviceSlice = createSlice({
             })
             .addCase(createService.fulfilled, (state, action) => {
                 state.loading = false
-                state.services.push(action.payload)
+                state.services.push(action.payload.service)
                 state.error = ''
                 state.message = 'Serviço criado com sucesso'
             })

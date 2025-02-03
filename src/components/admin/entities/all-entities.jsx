@@ -27,11 +27,11 @@ export default function AllEntities() {
     const [filteredEntities, setFilteredEntities] = useState(null)
     const [visibleMessage, setVisibleMessage] = useState(null)
     const [visibleError, setVisibleError] = useState(null)
-    
+
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const selectedHotelId = useSelector((state) => state.auth.hotel)
-    const { hotelProfileById, loading, message, error  } = useSelector((state) => state.hotelProfileById)
+    const { hotelProfileById, loading, message, error } = useSelector((state) => state.hotelProfileById)
 
 
     // Exibir mensagem com duração de 5 segundos
@@ -117,21 +117,24 @@ export default function AllEntities() {
             {error && !loading && (
                 <Alert sx={{ mt: 0, mb: 1 }} severity="error">{error}</Alert>
             )}
-
-            <Title Title={'Gerenciamento de Entidades'} />
-            <Paper elevation={3} sx={{ padding: 2, mt: 2, mb:2 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', mt: 2 }}>
-                    {addEntity ? (
-                        <AddEntities handleSearch={handleSearch} />
-                    ) : (
-                        <FilterEntities handleSearch={handleSearch} handleAddEntity={handleAddEntity} />
-                    )}
-                </Box>
-            </Paper>
+            {!selectedHotelId && (
+                <>
+                    <Title Title={'Gerenciamento de Entidades'} />
+                    <Paper elevation={3} sx={{ padding: 2, mt: 2, mb: 2 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', mt: 2 }}>
+                            {addEntity ? (
+                                <AddEntities handleSearch={handleSearch} />
+                            ) : (
+                                <FilterEntities handleSearch={handleSearch} handleAddEntity={handleAddEntity} />
+                            )}
+                        </Box>
+                    </Paper>
+                </>
+            )}
 
             <Title Title={'Entidades'} />
             {loading ? (
-                <Paper elevation={3} sx={{ padding: 2, mt: 1 }}>
+                <Paper elevation={3}>
                     <Table size="small">
                         <TableBody>
                             {[...Array(5)].map((_, index) => (

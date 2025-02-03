@@ -7,15 +7,15 @@ import { createService, getAllServices } from "../../../redux/slice/managment/se
 
 export default function AddService() {
     const dispatch = useDispatch()
+    const selectedHotelId = useSelector((state) => state.auth.hotel)
     const selectedDepartment = useSelector((state) => state.departments.selectedDepartment)
     const [ newService, setNewService ] = useState('')
 
     //criar serviço
     const handleAddService = () => {
         if (newService.trim){
-            dispatch(createService({name: newService.trim(), department_id: selectedDepartment.id}))
+            dispatch(createService({name: newService.trim(), department_id: selectedDepartment.id, hotel_id: selectedHotelId }))
             setNewService('')
-            dispatch(getAllServices())
         }
     }
 

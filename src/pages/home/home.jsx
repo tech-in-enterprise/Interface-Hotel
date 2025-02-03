@@ -52,7 +52,7 @@ export default function Home() {
         </Box>
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           <MenuSuperior newTicket={newTicket} handleClick={handleClick} />
-          <Box sx={{ mt: 2, p: 2, flexGrow: 1, overflow: 'auto' }}>
+          <Box sx={{ p: 2, flexGrow: 1, overflow: 'auto' }}>
             <Outlet /> {/* Renderiza o conteúdo das rotas filhas */}
        
             {newTicket && <OpenManualTicket open={newTicket} onClose={handleClick} />}
