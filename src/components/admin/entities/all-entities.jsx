@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom'
 import FilterEntities from './filter-entities'
 import AddEntities from './add-entities'
 import { setHotelName } from '../../../redux/slice/menuSlice'
+import HotelData from './hotel-data'
 
 
 
@@ -131,8 +132,9 @@ export default function AllEntities() {
                     </Paper>
                 </>
             )}
-
-            <Title Title={'Entidades'} />
+            {!selectedHotelId && (
+                <Title Title={'Entidades'} />
+            )}
             {loading ? (
                 <Paper elevation={3}>
                     <Table size="small">
@@ -163,62 +165,60 @@ export default function AllEntities() {
                 </Paper>
             ) : (
                 <>
-                    <Paper elevation={3} sx={{ padding: 2 }} >
-                        <Table size="small">
-                            <TableHead>
-                                <TableRow sx={{ background: '#101F33' }}>
-                                    <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
-                                        Razão Social
-                                    </TableCell>
-                                    <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
-                                        Entidades
-                                    </TableCell>
-                                    <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
-                                        CNPJ
-                                    </TableCell>
-                                    <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
-                                        Estado
-                                    </TableCell>
-                                    <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
-                                        Ações
-                                    </TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {(filteredEntities || hotelProfileById).map((entity) => (
-                                    <TableRow sx={{ background: '#FFF' }} key={entity.id}>
-                                        <TableCell sx={{ justifyContent: 'space-around', fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
-                                            <Box>{entity.registered_name}</Box>
+                    {!selectedHotelId && (
+                        <Paper elevation={3} sx={{ padding: 2 }} >
+                            <Table size="small">
+                                <TableHead>
+                                    <TableRow sx={{ background: '#101F33' }}>
+                                        <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
+                                            Razão Social
                                         </TableCell>
-                                        <TableCell sx={{ justifyContent: 'space-around', fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
-                                            <Box>{entity.hotel_name}</Box>
+                                        <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
+                                            Entidades
                                         </TableCell>
-                                        <TableCell sx={{ justifyContent: 'space-around', fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
-                                            <Box>{entity.cnpj}</Box>
+                                        <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
+                                            CNPJ
                                         </TableCell>
-                                        <TableCell sx={{ justifyContent: 'space-around', fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
-                                            <Box>{entity.state}</Box>
+                                        <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
+                                            Estado
                                         </TableCell>
+                                        <TableCell sx={{ fontSize: '0.8rem', fontWeight: 'bold', border: '1px solid #ccc', padding: '8px', textAlign: 'center', color: '#FFF' }}>
+                                            Ações
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {(filteredEntities || hotelProfileById).map((entity) => (
+                                        <TableRow sx={{ background: '#FFF' }} key={entity.id}>
+                                            <TableCell sx={{ justifyContent: 'space-around', fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
+                                                <Box>{entity.registered_name}</Box>
+                                            </TableCell>
+                                            <TableCell sx={{ justifyContent: 'space-around', fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
+                                                <Box>{entity.hotel_name}</Box>
+                                            </TableCell>
+                                            <TableCell sx={{ justifyContent: 'space-around', fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
+                                                <Box>{entity.cnpj}</Box>
+                                            </TableCell>
+                                            <TableCell sx={{ justifyContent: 'space-around', fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
+                                                <Box>{entity.state}</Box>
+                                            </TableCell>
 
-                                        <TableCell sx={{ justifyContent: 'space-around', fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
-
-                                            {String(selectedHotelId) === String(entity.id) ? (
-                                                <Button variant="contained" color="primary" sx={{ fontSize: '0.8rem', textTransform: 'none' }} onClick={handleExitEntity}>
-                                                    Sair
-                                                </Button>
-                                            ) : (
+                                            <TableCell sx={{ justifyContent: 'space-around', fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
                                                 <Button variant="contained" color="primary" sx={{ fontSize: '0.8rem', textTransform: 'none' }} onClick={() => handleAccessEntity(entity.id)}>
                                                     Acessar Entidade
                                                 </Button>
-                                            )}
-                                        </TableCell>
+                                            </TableCell>
 
-                                    </TableRow>
-                                ))}
+                                        </TableRow>
+                                    ))}
 
-                            </TableBody>
-                        </Table>
-                    </Paper>
+                                </TableBody>
+                            </Table>
+                        </Paper>
+                    )}
+                    {selectedHotelId && (
+                        <HotelData handleExitEntity={handleExitEntity} />
+                    )}
                 </>
             )}
         </React.Fragment>

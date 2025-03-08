@@ -20,4 +20,5 @@ export const store = configureStore({
         departments: departments,
         services: services,
     },
+
 })

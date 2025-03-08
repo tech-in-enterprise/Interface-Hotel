@@ -52,12 +52,12 @@ export default function SignIn() {
     async function handleSubmit(event) {
         event.preventDefault()
 
-        
+
         if (!frontendValidation()) {
             return
         }
         dispatch(loginUser.pending())
-        // Se chegou aqui, os campos foram preenchidos corretamente
+        console.log('Se chegou aqui, os campos foram preenchidos corretamente', loginUser)
         setTimeout(async () => {
             dispatch(loginUser({ email, password }))
                 .unwrap()
@@ -81,7 +81,10 @@ export default function SignIn() {
                 <Grid item xs={6} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
                     <Box sx={{ position: 'absolute', bottom: 15 }} >
                         {error && (
-                            <Alert sx={{ mt: 0, mb: 1 }} severity="error">{error}</Alert>
+                            <Alert severity="error">
+                                {typeof error === "string" ? error : JSON.stringify(error)}
+                            </Alert>
+
                         )}
                     </Box>
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ width: '80%', maxWidth: 400, position: 'relative' }}>
@@ -136,7 +139,7 @@ export default function SignIn() {
                             {loading ? (
                                 <Button type="submit" variant="contained" disabled={!(email && password)} color="primary" sx={{ fontSize: '0.8rem' }}>
                                     Entrando
-                                    <CircularProgress size={20} sx={{ ml: 2, color:'#FFFFFF' }} />
+                                    <CircularProgress size={20} sx={{ ml: 2, color: '#FFFFFF' }} />
                                 </Button>
                             ) : (
                                 <Button type="submit" variant="contained" disabled={!(email && password)} color="primary" sx={{ fontSize: '0.8rem' }}>

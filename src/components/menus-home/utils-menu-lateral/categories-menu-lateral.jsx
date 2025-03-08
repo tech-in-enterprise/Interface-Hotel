@@ -5,9 +5,9 @@ import FolderSharedIcon from '@mui/icons-material/FolderShared'
 import GroupsIcon from '@mui/icons-material/Groups'
 import ApartmentIcon from '@mui/icons-material/Apartment'
 import PersonIcon from '@mui/icons-material/Person'
-import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar'
 import { useSelector } from 'react-redux'
-
+import HomeIcon from '@mui/icons-material/Home'
+import EngineeringIcon from '@mui/icons-material/Engineering'
 
 
 
@@ -26,8 +26,15 @@ export const getCategories = (departments = []) => {
     }
   }, [selectedHotelId, departments])
 
+
   return [
 
+    {
+      role: ['Administrador'],
+      children: [
+        { id: 100, name: 'Início', icon: <HomeIcon style={{ fontSize: '1rem', color: '#FFF' }} />, path: '/' },
+      ]
+    },
     {
       name: 'Admin',
       role: ['Administrador'],
@@ -51,6 +58,7 @@ export const getCategories = (departments = []) => {
         children: filteredDepartmentsHotelById
         .map(department => ({
           id: department.id,
+          icon: department.image_url ? (<img src={department.image_url} alt={department.name} style={{ width: '16px', height: '24px', objectFit: 'contain', borderRadius: '4px', filter: 'invert(1) saturate(1000%) hue-rotate(30deg)' }}/>) : (<EngineeringIcon style={{ fontSize: '1rem', color: '#FFF' }} />) ,
           name: department.name,
           path: selectedHotelId ? `/admin/setores/${department.id}/${selectedHotelId}` : `/setores/${department.id}`,
         }))

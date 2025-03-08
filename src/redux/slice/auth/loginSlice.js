@@ -11,6 +11,9 @@ export const loginUser = createAsyncThunk('auth/loginUser', async (loginData, { 
         Cookies.set('authToken', response.data.access_token, { expires: 1, path: '/' })
         Cookies.set('role', response.data.role, { expires: 1, path: '/' })
         Cookies.set('user', JSON.stringify(response.data.user), { expires: 1, path: '/' })
+        if (response.data.hotel) {
+            Cookies.set("hotel", response.data.hotel, { expires: 1, path: "/" })
+        }
         return response.data
     } catch (error) {
         return rejectWithValue(
@@ -28,7 +31,7 @@ const loginSlice = createSlice({
         loading: false,
         user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null,
         token: Cookies.get('authToken') || null,
-        role: Cookies.get('role') || null, 
+        role: Cookies.get('role') || null,
         hotel: Cookies.get('hotel') || null,
         isAuthenticated: !!Cookies.get('authToken'),
         error: ''
@@ -58,8 +61,14 @@ const loginSlice = createSlice({
             state.isAuthenticated = !!Cookies.get("authToken")
         },
         setHotel: (state, action) => {
-            state.hotel = action.payload
-            Cookies.set("hotel", action.payload, { expires: 1, path: "/" }) 
+            const hotel = action.payload || Cookies.get("hotel") || null
+            state.hotel = hotel;
+
+            if (hotel) {
+                Cookies.set("hotel", hotel, { expires: 1, path: "/" })
+            } else {
+                Cookies.remove("hotel", { path: "/" })
+            }
         },
         clearHotel: (state) => {
             state.hotel = null
@@ -79,6 +88,7 @@ const loginSlice = createSlice({
                 state.loading = false
                 state.user = action.payload.user
                 state.token = action.payload.access_token
+                state.hotel = action.payload.hotel || Cookies.get("hotel") || null
                 state.role = action.payload.role
                 state.isAuthenticated = true
                 state.error = ''

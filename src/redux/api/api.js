@@ -6,7 +6,7 @@ import { handleLogout } from "../../components/auth/sign-out"
 
 // Cria a instância do Axios
 export const api = axios.create({
-    baseURL: 'http://localhost:8000'
+    baseURL: 'http://localhost:8000',
 })
 
 //Adiciona um intercptador para as requisições

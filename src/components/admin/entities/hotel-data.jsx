@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { Box, TextField, Avatar, Button, Grid, Paper } from '@mui/material'
+import { Box, TextField, Grid, Paper, Button } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import Alert from '@mui/material/Alert'
 import Skeleton from '@mui/material/Skeleton'
 import Title from '../../general-components/title-from-pages'
-import { getHotelById } from '../../../redux/slice/managment/profile-info-hotel'
 
 
 
 
-export default function ProfileHotel() {
+
+export default function HotelData({ handleExitEntity }) { //vindo do componente all-entities
 
     //pega as informações dos dados (nome, cnpj, email, etc..) e retorna na tela através de hotelProfileById
     const dispatch = useDispatch()
@@ -17,11 +17,6 @@ export default function ProfileHotel() {
 
     const selectedHotelId = useSelector((state) => state.auth.hotel)
 
-
-    // Retorna os dados do hotel criado
-    useEffect(() => {
-        dispatch(getHotelById())
-    }, [dispatch])
 
     const [filteredUsers, setFilteredUsers] = useState([])
     useEffect(() => {
@@ -107,52 +102,67 @@ export default function ProfileHotel() {
                 </Grid>
             ) : (
                 <>
-                    {/* Dados do hotel */}
-                    {filteredUsers.map((hotelData) => (
-                        <Box sx={{ flexGrow: 1, ml: 3 }} key={hotelData.id}>
-                            <Grid container spacing={2}>
-                                {/* Nome do hotel e CNPJ */}
-                                <Grid item xs={12} sm={3}>
-                                    <TextField disabled label="Razão social" fullWidth variant="standard" value={hotelData.registered_name} sx={{ m: 1 }} InputLabelProps={{ style: { fontSize: '0.9rem' }, shrink: true }} InputProps={{ readOnly: true }} />
-                                </Grid>
-                                <Grid item xs={12} sm={3}>
-                                    <TextField disabled label="Nome fantasia" fullWidth variant="standard" sx={{ m: 1 }} value={hotelData.hotel_name} InputLabelProps={{ style: { fontSize: '0.9rem' }, shrink: true }} InputProps={{ readOnly: true }} />
-                                </Grid>
-                                <Grid item xs={12} sm={3}>
-                                    <TextField disabled label="CNPJ" fullWidth variant="standard" sx={{ m: 1 }} value={hotelData.cnpj} InputLabelProps={{ style: { fontSize: '0.9rem' }, shrink: true }} InputProps={{ readOnly: true }} />
-                                </Grid>
+                    <Paper elevation={3} sx={{ padding: 2 }} >
+                        {/* Dados do hotel */}
+                        {filteredUsers.map((hotelData) => (
+                            <Box sx={{ flexGrow: 1}} key={hotelData.id}>
+                                <Grid container spacing={2}>
+                                    {/* Nome do hotel e CNPJ */}
+                                    <Grid item xs={12} sm={3}>
+                                        <TextField disabled label="Razão social" fullWidth variant="standard" value={hotelData.registered_name} sx={{ m: 1 }} InputLabelProps={{ style: { fontSize: '0.9rem' }, shrink: true }} InputProps={{ readOnly: true }} />
+                                    </Grid>
+                                    <Grid item xs={12} sm={3}>
+                                        <TextField disabled label="Nome fantasia" fullWidth variant="standard" sx={{ m: 1 }} value={hotelData.hotel_name} InputLabelProps={{ style: { fontSize: '0.9rem' }, shrink: true }} InputProps={{ readOnly: true }} />
+                                    </Grid>
+                                    <Grid item xs={12} sm={3}>
+                                        <TextField disabled label="CNPJ" fullWidth variant="standard" sx={{ m: 1 }} value={hotelData.cnpj} InputLabelProps={{ style: { fontSize: '0.9rem' }, shrink: true }} InputProps={{ readOnly: true }} />
+                                    </Grid>
 
-                                {/*Telefone*/}
-                                <Grid item xs={12} sm={3}>
-                                    <TextField disabled label="Email" fullWidth variant="standard" sx={{ m: 1 }} value={hotelData.hotel_email} InputLabelProps={{ style: { fontSize: '0.9rem' }, shrink: true }} InputProps={{ readOnly: true }} />
-                                </Grid>
+                                    {/*Telefone*/}
+                                    <Grid item xs={12} sm={3}>
+                                        <TextField disabled label="Email" fullWidth variant="standard" sx={{ m: 1 }} value={hotelData.hotel_email} InputLabelProps={{ style: { fontSize: '0.9rem' }, shrink: true }} InputProps={{ readOnly: true }} />
+                                    </Grid>
 
-                                {/*Telefone*/}
-                                <Grid item xs={12} sm={3}>
-                                    <TextField disabled label="Telefone" fullWidth variant="standard" sx={{ m: 1 }} value={hotelData.phone_number} InputLabelProps={{ style: { fontSize: '0.9rem' }, shrink: true }} InputProps={{ readOnly: true }} />
-                                </Grid>
+                                    {/*Telefone*/}
+                                    <Grid item xs={12} sm={3}>
+                                        <TextField disabled label="Telefone" fullWidth variant="standard" sx={{ m: 1 }} value={hotelData.phone_number} InputLabelProps={{ style: { fontSize: '0.9rem' }, shrink: true }} InputProps={{ readOnly: true }} />
+                                    </Grid>
 
-                                {/* Endereço*/}
-                                <Grid item xs={12} sm={3}>
-                                    <TextField disabled label="Rua" fullWidth variant="standard" sx={{ m: 1 }} value={hotelData.street_address} InputLabelProps={{ style: { fontSize: '0.9rem' }, shrink: true }} InputProps={{ readOnly: true }} />
-                                </Grid>
-                                <Grid item xs={12} sm={3}>
-                                    <TextField disabled label="Número" fullWidth variant="standard" sx={{ m: 1 }} value={hotelData.number_address} InputLabelProps={{ style: { fontSize: '0.9rem' }, shrink: true }} InputProps={{ readOnly: true }} />
-                                </Grid>
-                                <Grid item xs={12} sm={3}>
-                                    <TextField disabled label="Cidade" fullWidth variant="standard" sx={{ m: 1 }} value={hotelData.city} InputLabelProps={{ style: { fontSize: '0.9rem' }, shrink: true }} InputProps={{ readOnly: true }} />
-                                </Grid>
-                                <Grid item xs={12} sm={3}>
-                                    <TextField disabled label="Estado" fullWidth variant="standard" sx={{ m: 1 }} value={hotelData.state} InputLabelProps={{ style: { fontSize: '0.9rem' }, shrink: true }} InputProps={{ readOnly: true }} />
-                                </Grid>
-                                <Grid item xs={12} sm={3}>
-                                    <TextField disabled label="CEP" fullWidth variant="standard" sx={{ m: 1 }} value={hotelData.cep} InputLabelProps={{ style: { fontSize: '0.9rem' }, shrink: true }} InputProps={{ readOnly: true }} />
-                                </Grid>
+                                    {/* Endereço*/}
+                                    <Grid item xs={12} sm={3}>
+                                        <TextField disabled label="Rua" fullWidth variant="standard" sx={{ m: 1 }} value={hotelData.street_address} InputLabelProps={{ style: { fontSize: '0.9rem' }, shrink: true }} InputProps={{ readOnly: true }} />
+                                    </Grid>
+                                    <Grid item xs={12} sm={3}>
+                                        <TextField disabled label="Número" fullWidth variant="standard" sx={{ m: 1 }} value={hotelData.number_address} InputLabelProps={{ style: { fontSize: '0.9rem' }, shrink: true }} InputProps={{ readOnly: true }} />
+                                    </Grid>
+                                    <Grid item xs={12} sm={3}>
+                                        <TextField disabled label="Cidade" fullWidth variant="standard" sx={{ m: 1 }} value={hotelData.city} InputLabelProps={{ style: { fontSize: '0.9rem' }, shrink: true }} InputProps={{ readOnly: true }} />
+                                    </Grid>
+                                    <Grid item xs={12} sm={3}>
+                                        <TextField disabled label="Estado" fullWidth variant="standard" sx={{ m: 1 }} value={hotelData.state} InputLabelProps={{ style: { fontSize: '0.9rem' }, shrink: true }} InputProps={{ readOnly: true }} />
+                                    </Grid>
+                                    <Grid item xs={12} sm={3}>
+                                        <TextField disabled label="CEP" fullWidth variant="standard" sx={{ m: 1 }} value={hotelData.cep} InputLabelProps={{ style: { fontSize: '0.9rem' }, shrink: true }} InputProps={{ readOnly: true }} />
+                                    </Grid>
 
 
-                            </Grid>
-                        </Box>
-                    ))}
+                                </Grid>
+                            </Box>
+                        ))}
+                    <Box sx={{display:'flex', flexDirection:'row-reverse', m:1}}>
+                        <Button variant="contained" color="primary" sx={{ fontSize: '0.8rem', textTransform: 'none' }} disabled onClick={handleExitEntity}>
+                            Salvar
+                        </Button>
+                        <Button variant="contained" sx={{ fontSize: '0.8rem', textTransform: 'none', mr:1, background:'#ffc26c' }} onClick={handleExitEntity}>
+                            Editar
+                        </Button>
+                    </Box>
+                    </Paper>
+                    <Box sx={{position: 'absolute', bottom: 20, right: 30}}>
+                        <Button variant="contained" color="primary" sx={{ fontSize: '0.8rem', textTransform: 'none' }} onClick={handleExitEntity}>
+                            Sair
+                        </Button>
+                    </Box>
                 </>
             )}
 

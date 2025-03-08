@@ -19,7 +19,7 @@ export default function Comodities() {
                                 <TextField
                                     name="text"
                                     type="text"
-                                    label="Ex.: Café da manhã"
+                                    label="Ex. Café da manhã"
                                     value=""
                                     variant="outlined"
                                     InputProps={{
@@ -37,6 +37,7 @@ export default function Comodities() {
                                 <TextField
                                     id="time"
                                     type="time"
+                                    label="Hora inicial"
                                     defaultValue="00:00"
                                     InputProps={{
                                         style: { height: '40px', padding: '0', marginRight: 10 }
@@ -55,6 +56,7 @@ export default function Comodities() {
                                 <TextField
                                     id="time"
                                     type="time"
+                                    label="Hora final"
                                     defaultValue="00:00"
                                     InputProps={{
                                         style: { height: '40px', padding: '0' }

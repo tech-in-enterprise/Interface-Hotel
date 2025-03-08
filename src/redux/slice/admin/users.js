@@ -113,6 +113,7 @@ const allUsers = createSlice({
             .addCase(removeHotelFromUser.fulfilled, (state, action) => {
                 state.loading = false
                 state.hotel = null
+                Cookies.remove('hotel')
                 state.error = ''
             })
             .addCase(removeHotelFromUser.rejected, (state, action) => {

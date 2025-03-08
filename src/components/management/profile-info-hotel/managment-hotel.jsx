@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { TextField, Grid, Button, Box, Avatar } from '@mui/material'
-import { useDispatch } from 'react-redux'
+import axios from 'axios'
 import Paper from '@mui/material/Paper'
 import LocationCityIcon from '@mui/icons-material/LocationCity'
 import Title from '../../general-components/title-from-pages'
@@ -20,15 +20,42 @@ export default function ManagmentHotel({ handleSearch }) {
     })
 
     const [errors, setErrors] = useState({})
+    const [imageUrl, setImageUrl] = useState('')
+    const [isUploading, setIsUploading] = useState(false)
+
+
+    const handleImageUpload = async (event) => {
+        const file = event.target.files[0]
+        if (!file) return;
+
+        setIsUploading(true);
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('upload_preset', 'hotel-photos')
+
+        try {
+            const response = await axios.post('https://api.cloudinary.com/v1_1/do8ruf0ah/image/upload', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+            })
+
+            if (response.data.secure_url) {
+                setImageUrl(response.data.secure_url)
+            }
+        } catch (error) {
+            console.error('Erro ao fazer upload da imagem:', error)
+        } finally {
+            setIsUploading(false)
+        }
+    }
 
     const fields = [
-        { name: 'social_media_facebook', label: 'Link facebook', xs: 6, required: true },
-        { name: 'social_media_instagram', label: 'Link instagram', xs: 6, required: true },
+        { id: 1, name: 'social_media_facebook', label: 'Link facebook', xs: 6, required: true },
+        { id: 2, name: 'social_media_instagram', label: 'Link instagram', xs: 6, required: true },
 
-        { name: 'wifi_name', label: 'Nome da rede', xs: 3, required: true },
-        { name: 'password_wifi', label: 'Senha do wi-fi', xs: 3, required: true },
-        { name: 'phone_number_reception', label: 'Telefone recepção', xs: 3, required: true },
-        { name: 'phone_number_reservation', label: 'Telefone reservas', xs: 3, required: true },
+        { id: 3, name: 'wifi_name', label: 'Nome da rede', xs: 3, required: true },
+        { id: 4, name: 'password_wifi', label: 'Senha do wi-fi', xs: 3, required: true },
+        { id: 5, name: 'phone_number_reception', label: 'Telefone recepção', xs: 3, required: true },
+        { id: 6, name: 'phone_number_reservation', label: 'Telefone reservas', xs: 3, required: true },
     ]
 
     const handleChange = (e) => {
@@ -50,9 +77,16 @@ export default function ManagmentHotel({ handleSearch }) {
                 <Grid container spacing={3} sx={{ p: 1 }}>
                     {/* Coluna da imagem */}
                     <Grid item xs={2}>
-                        <Avatar sx={{ width: '100%', height: 150, borderRadius: 3, border: '2px solid #ccc' }}>
-                            <LocationCityIcon sx={{ fontSize: 60 }} />
-                        </Avatar>
+                    <Box sx={{ position: 'relative' }}>
+                            <Avatar
+                                sx={{ width: '100%', height: 150, borderRadius: 3, border: '2px solid #ccc', objectFit: ''}} src={imageUrl} >
+                                {!imageUrl && <LocationCityIcon sx={{ fontSize: 60 }} />}
+                            </Avatar>
+                            <Button size="small" variant="contained" component="label" sx={{ position: 'absolute', bottom: 0, width: '100%', fontSize: '0.8rem'}} disabled={isUploading} >
+                                {isUploading ? 'Uploading...' : 'Upload Photo'}
+                                <input hidden accept="image/*" type="file" onChange={handleImageUpload}/>
+                            </Button>
+                        </Box>
                     </Grid>
 
                     {/* Coluna dos campos do formulário */}
@@ -60,7 +94,7 @@ export default function ManagmentHotel({ handleSearch }) {
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <Grid container spacing={2}>
                                 {fields.map((field) => (
-                                    <Grid item xs={field.xs} key={field.name}>
+                                    <Grid item xs={field.xs} key={field.id}>
                                         <TextField
                                             name={field.name}
                                             label={field.label}
@@ -97,8 +131,8 @@ export default function ManagmentHotel({ handleSearch }) {
                 </Grid>
             </Paper>
 
-            <Title Title={'Comodities'}/>
-            <Comodities/>
+            <Title Title={'Comodities'} />
+            <Comodities />
 
         </React.Fragment>
     )

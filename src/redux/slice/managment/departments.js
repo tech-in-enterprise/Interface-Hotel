@@ -23,7 +23,7 @@ export const createDepartment = createAsyncThunk(
       const response = await api.post('/departments', newDepartment)
       return response.data
     } catch (error) {
-      return rejectWithValue('Erro ao criar Departamento. Verifique os dados e tente novamente.')
+      return rejectWithValue( error.response?.data?.message || 'Erro ao criar Departamento. Verifique os dados e tente novamente.')
     }
   }
 )

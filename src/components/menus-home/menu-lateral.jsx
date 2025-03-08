@@ -8,7 +8,6 @@ import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import ViewInArIcon from '@mui/icons-material/ViewInAr'
-import HomeIcon from '@mui/icons-material/Home'
 import { Typography } from '@mui/material'
 import { setItemName, setSelectedTabLabel } from '../../redux/slice/menuSlice'
 import { useDispatch, useSelector } from 'react-redux'
@@ -35,15 +34,6 @@ export default function MenuLateral() {
     dispatch(getAllDepartments())
   }, [dispatch])
 
-  //atualiza o itemName quando for clicado em início
-  const handleDashboardClick = () => {
-    dispatch(setItemName('Home'))
-    dispatch(setSelectedTabLabel(''))
-    setActiveItem(0)
-    localStorage.setItem('activeMenuItem', 0) 
-    navigate("/")
-  }
-
 
   const handleCategoryItemClick = (childName, id, path) => {
     dispatch(setItemName(childName))
@@ -53,9 +43,9 @@ export default function MenuLateral() {
     navigate(path)
   }
 
-  const categories = getCategories( departments)
+  const categories = getCategories(departments)
 
-  const filteredCategories  = filterCategories(categories, role, hotel)
+  const filteredCategories = filterCategories(categories, role, hotel)
 
   return (
     <Drawer variant="permanent" sx={{ background: '#101F33' }}>
@@ -67,42 +57,30 @@ export default function MenuLateral() {
           </Typography>
         </ListItem>
 
-        <ListItem disablePadding sx={{ background: '#101F33' }} onClick={handleDashboardClick}>
-          <ListItemButton selected={activeItem === 0} sx={{ py: 1, px: 2, color: 'rgba(255, 255, 255, 0.7)' }} >
-            <ListItemIcon><HomeIcon style={{ fontSize: '1rem', color:'#FFF' }} /></ListItemIcon>
-            <ListItemText>
-              <Typography sx={{ fontSize: '0.9rem' }}>
-                Início
-              </Typography>
-            </ListItemText>
-          </ListItemButton>
-        </ListItem>
-        <Divider />
-
-        {filteredCategories
-          .map(({ name, children }) => (
-            <Box key={name} sx={{ bgcolor: '#101F33' }}>
-              <ListItem sx={{ p: 1, pb: 0 }}>
-                <ListItemText
-                  sx={{ color: 'rgba(255, 255, 255, 0.7)', mb: 0 }}
-                  primary={<Typography sx={{ fontSize: '0.9rem' }}>{name}</Typography>}
-                />
+        {filteredCategories.map(({ name, children }, index) => (
+          <Box key={`category-${name}-${index}`} sx={{ bgcolor: '#101F33' }}>
+            <ListItem sx={{ p: 1, pb: 0 }}>
+              <ListItemText
+                sx={{ color: 'rgba(255, 255, 255, 0.7)', mb: 0 }}
+                primary={<Typography sx={{ fontSize: '0.9rem' }}>{name}</Typography>}
+              />
+            </ListItem>
+            {children.map(({ id, name: childName, icon, path }, childIndex) => (
+              <ListItem disablePadding key={`child-${id}-${childIndex}`}>
+                <ListItemButton selected={activeItem === id} sx={{ color: 'rgba(255, 255, 255, 0.7)' }} onClick={() => handleCategoryItemClick(childName, id, path)}>
+                  <ListItemIcon>{icon}</ListItemIcon>
+                  <ListItemText>
+                    <Typography sx={{ fontSize: '0.8rem' }}>
+                      {childName}
+                    </Typography>
+                  </ListItemText>
+                </ListItemButton>
               </ListItem>
-              {children.map(({ id, name: childName, icon, path }) => (
-                <ListItem disablePadding key={id}>
-                  <ListItemButton selected={activeItem === id} sx={{ color: 'rgba(255, 255, 255, 0.7)' }} onClick={() => handleCategoryItemClick(childName, id, path)}>
-                    <ListItemIcon >{icon}</ListItemIcon>
-                    <ListItemText>
-                      <Typography sx={{ fontSize: '0.8rem' }}>
-                        {childName}
-                      </Typography>
-                    </ListItemText>
-                  </ListItemButton>
-                </ListItem>
-              ))}
-              <Divider sx={{ mt: 2 }} />
-            </Box>
-          ))}
+            ))}
+            <Divider sx={{ mt: 2 }} />
+          </Box>
+        ))}
+
 
       </List>
     </Drawer>

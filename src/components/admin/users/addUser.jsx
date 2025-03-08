@@ -106,6 +106,7 @@ export default function AddUsers() {
                             <TextField name='email' label="E-mail" required fullWidth variant="outlined"
                                 value={formData.email}
                                 onChange={handleChange}
+                                autoComplete="off"
                                 error={!!errors.email}
                                 helperText={errors.email}
                                 InputProps={{
@@ -121,6 +122,7 @@ export default function AddUsers() {
                             <TextField name='password' label="Senha" type="password" required fullWidth variant="outlined"
                                 value={formData.password}
                                 onChange={handleChange}
+                                autoComplete="off"  
                                 error={!!errors.password}
                                 helperText={errors.password}
                                 InputProps={{

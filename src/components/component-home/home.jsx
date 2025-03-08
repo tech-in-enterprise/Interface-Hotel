@@ -11,7 +11,7 @@ export default function ComponentHome() {
     return (
         <Box>
             {role === "Administrador" ? (
-                <Title Title = {"Admin"}/>
+                <Title Title = {"Administrador"}/>
             ) : role === "Gerente" ? (
                 <div>
                     <h1>Bem-vindo, Gerente</h1>
