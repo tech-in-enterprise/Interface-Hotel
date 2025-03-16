@@ -1,13 +1,41 @@
 
 import React, { useState } from 'react'
 import { Box, Button, Grid, Paper, Typography, TextField } from '@mui/material'
+import { useDispatch, useSelector } from 'react-redux'
+import { createAmenity } from '../../../redux/slice/managment/hotel_amenities'
 
 
 
 export default function Comodities() {
+    const dispatch = useDispatch()
+    const selectedHotelId = useSelector((state) => state.auth.hotel)
+    const { amenities, message, error, loading } = useSelector((state) => state.amenities)
 
-    const [comodities, setComodities] = useState([{ id: 1, name: 'Serviço Padrão', startTime: '08:00', endTime: '18:00', isEditing: true }])
+    const [newAmenity, setNewAmenity] = useState('')
+    const [startTime, setStartTime] = useState('00:00')
+    const [endTime, setEndTime] = useState('00:00')
+    const [errors, setErrors] = useState({})
 
+    const validateFields = () => {
+        const newErrors = {}
+        if (!newAmenity.trim()) newErrors.department = 'O nome da amenidade é obrigatório.'
+        setErrors(newErrors)
+        return Object.keys(newErrors).length === 0
+    }
+
+    // Criar departamento
+    const handleAddAmenity = () => {
+        if (validateFields()) {
+            dispatch(createAmenity({
+                name: newAmenity.trim(),
+                start_time: startTime,
+                end_time: endTime,
+                hotel_id: selectedHotelId,
+            }))
+            setNewAmenity('')
+            setErrors({})
+        }
+    }
 
     return (
         <React.Fragment>
@@ -20,8 +48,11 @@ export default function Comodities() {
                                     name="text"
                                     type="text"
                                     label="Ex. Café da manhã"
-                                    value=""
+                                    value={newAmenity}
                                     variant="outlined"
+                                    onChange={(e) => setNewAmenity(e.target.value)}
+                                    error={!!errors.department}
+                                    helperText={errors.department}
                                     InputProps={{
                                         style: { height: '40px', padding: '0', marginRight: 10 }
                                     }}
@@ -38,7 +69,8 @@ export default function Comodities() {
                                     id="time"
                                     type="time"
                                     label="Hora inicial"
-                                    defaultValue="00:00"
+                                    value={startTime}
+                                    onChange={(e) => setStartTime(e.target.value)}
                                     InputProps={{
                                         style: { height: '40px', padding: '0', marginRight: 10 }
                                     }}
@@ -57,7 +89,8 @@ export default function Comodities() {
                                     id="time"
                                     type="time"
                                     label="Hora final"
-                                    defaultValue="00:00"
+                                    value={endTime}
+                                    onChange={(e) => setEndTime(e.target.value)}
                                     InputProps={{
                                         style: { height: '40px', padding: '0' }
                                     }}
@@ -72,7 +105,7 @@ export default function Comodities() {
                             </Box>
 
 
-                            <Button variant="contained" color="primary" sx={{ fontSize: '0.8rem', padding: '6px 12px', textTransform: 'none' }}>
+                            <Button variant="contained" color="primary" sx={{ fontSize: '0.8rem', padding: '6px 12px', textTransform: 'none' }}  onClick={handleAddAmenity}>
                                 Adicionar
                             </Button>
 

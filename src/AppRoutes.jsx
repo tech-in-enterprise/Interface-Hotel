@@ -48,6 +48,7 @@ export default function AppRoutes() {
                     <Route path="/hotel/:hotelId?" element={<Private><ManagmentHotel /></Private>} />
                     <Route path="/departamentos/:hotelId?" element={<Private><Department /></Private>} />
                     <Route path="/departamento/servicos/:hotelId?" element={<Private><ServicesFromDepartments /></Private>} />
+                    <Route path="/usuarios/:hotelId?" element={<Private><Users /></Private>} />
                     <Route path="/setores/:departamentoId?" element={<Private><ChamadosAbertos /></Private>} />
                     <Route path="/contas/:hotelId?" element={<Private><UserCard /></Private>} />
                     <Route path="/relatorios/:hotelId?" element={<Private><DashboardCard/></Private>} />            

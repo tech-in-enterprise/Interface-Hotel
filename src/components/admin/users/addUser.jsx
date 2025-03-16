@@ -13,7 +13,7 @@ export default function AddUsers() {
 
     const dispatch = useDispatch()
     const { roles } = useSelector((state) => state.roles)
-    const { hotelProfileById } = useSelector((state) => state.hotelProfileById)
+    const { hotelRegister } = useSelector((state) => state.entityHotel)
     const selectedHotelId = useSelector((state) => state.auth.hotel)
 
     const [formData, setFormData] = useState({
@@ -192,7 +192,7 @@ export default function AddUsers() {
                                             onChange={handleHotelChange}
                                             sx={{ height: '40px', fontSize: '0.9rem' }}
                                         >
-                                            {hotelProfileById
+                                            {hotelRegister
                                                 .filter((hotel) => String(hotel.id) === String(selectedHotelId)) 
                                                 .map((filteredHotel) => (
                                                     <MenuItem key={filteredHotel.id} value={filteredHotel.id}>

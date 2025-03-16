@@ -30,21 +30,15 @@ export default function AddDepartment() {
 
     const handleImageUpload = async (event) => {
         const file = event.target.files[0]
-        if (!file) return;
-
-        setIsUploading(true);
+        if (!file) return
+        setIsUploading(true)
         const formData = new FormData()
         formData.append('file', file)
         formData.append('upload_preset', 'hotel-photos')
 
         try {
-            const response = await axios.post('https://api.cloudinary.com/v1_1/do8ruf0ah/image/upload', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
-            })
-
-            if (response.data.secure_url) {
-                setImageUrl(response.data.secure_url)
-            }
+            const response = await axios.post('https://api.cloudinary.com/v1_1/do8ruf0ah/image/upload', formData, { headers: { 'Content-Type': 'multipart/form-data' }})
+            if (response.data.secure_url) setImageUrl(response.data.secure_url)
         } catch (error) {
             console.error('Erro ao fazer upload da imagem:', error)
         } finally {
@@ -69,10 +63,10 @@ export default function AddDepartment() {
         if (validateFields()) {
             dispatch(createDepartment({
                 name: newDepartment.trim(),
-                hotel_id: selectedHotelId,
                 start_time: startTime,
                 end_time: endTime,
                 image_url: imageUrl,
+                hotel_id: selectedHotelId,
             }))
             setNewDepartment('')
             setImageUrl('')
@@ -86,7 +80,7 @@ export default function AddDepartment() {
                 {/* Avatar com Botão Upload Absoluto */}
                 <Grid item xs={2}>
                     <Box sx={{ position: 'relative' }}>
-                        <Avatar sx={{ width: '100%', height: 150, borderRadius: 3, border: '2px solid #ccc' }}>
+                        <Avatar sx={{ width: '100%', height: 150, borderRadius: 2, border: '2px solid #ccc' }}>
                             {imageUrl ?
                             (<img src={imageUrl} alt="Icone Departamento" style={{ width: '100%', height: '100%', objectFit: 'contain'}}/>) : (
                                 <LocationCityIcon sx={{ fontSize: 60 }} />
@@ -110,10 +104,10 @@ export default function AddDepartment() {
                                 label="Criar departamento"
                                 fullWidth
                                 value={newDepartment}
-                                error={!!errors.department}
-                                helperText={errors.department}
                                 onChange={(e) => setNewDepartment(e.target.value)}
                                 placeholder="Criar novo departamento"
+                                error={!!errors.department}
+                                helperText={errors.department}
                                 InputProps={{
                                     style: { height: '40px', padding: '0' },
                                 }}
@@ -178,7 +172,6 @@ export default function AddDepartment() {
                     <Grid item xs={12}>
                         <FormControlLabel
                             control={<Checkbox color="primary" />}
-
                             onChange={(e) => handle24HoursChange(e.target.checked)}
                             checked={is24Hours}
                             label="24 Horas"

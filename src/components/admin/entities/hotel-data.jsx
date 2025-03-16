@@ -12,8 +12,7 @@ import Title from '../../general-components/title-from-pages'
 export default function HotelData({ handleExitEntity }) { //vindo do componente all-entities
 
     //pega as informações dos dados (nome, cnpj, email, etc..) e retorna na tela através de hotelProfileById
-    const dispatch = useDispatch()
-    const { hotelProfileById, loading, error, message } = useSelector((state) => state.hotelProfileById)
+    const { hotelRegister, loading, error, message  } = useSelector((state) => state.entityHotel)
 
     const selectedHotelId = useSelector((state) => state.auth.hotel)
 
@@ -21,12 +20,12 @@ export default function HotelData({ handleExitEntity }) { //vindo do componente 
     const [filteredUsers, setFilteredUsers] = useState([])
     useEffect(() => {
         if (selectedHotelId) {
-            const filtered = hotelProfileById.filter((hotel) => String(hotel.id) === String(selectedHotelId))
+            const filtered = hotelRegister.filter((hotel) => String(hotel.id) === String(selectedHotelId))
             setFilteredUsers(filtered)
         } else {
-            setFilteredUsers(hotelProfileById)
+            setFilteredUsers(hotelRegister)
         }
-    }, [selectedHotelId, hotelProfileById])
+    }, [selectedHotelId, hotelRegister])
 
     return (
         <React.Fragment>

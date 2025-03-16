@@ -17,7 +17,7 @@ import { setSelectedTabLabel } from '../../../redux/slice/menuSlice'
 import Skeleton from '@mui/material/Skeleton'
 import Title from '../../general-components/title-from-pages'
 import { useNavigate } from 'react-router-dom'
-import AddDepartment from './addDepartment'
+import AddDepartment from './add-department'
 import AlertMessages from '../../general-components/alert-messages'
 
 
@@ -101,7 +101,7 @@ export default function Department() {
                             {filteredDepartmentsHotelById.map((department) => (
                                 <TableRow key={department.id} sx={{ background: '#FFF' }}>
                                     <TableCell sx={{ fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                        <Avatar src={department.image_url} alt={department.name} sx={{borderRadius: 2}}/>
+                                        <Avatar sx={{width: 32, height: 32, borderRadius: 2}}  src={department.image_url} alt={department.name}/>
                                     </TableCell>
                                     <TableCell sx={{ fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', textAlign: 'center' }}>
                                         {department.name}

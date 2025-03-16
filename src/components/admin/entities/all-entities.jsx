@@ -7,7 +7,6 @@ import TableRow from '@mui/material/TableRow'
 import TableCell from '@mui/material/TableCell'
 import Paper from '@mui/material/Paper'
 import { useDispatch, useSelector } from 'react-redux'
-import { getHotelById } from '../../../redux/slice/managment/profile-info-hotel'
 import Alert from '@mui/material/Alert'
 import Skeleton from '@mui/material/Skeleton'
 import Title from '../../general-components/title-from-pages'
@@ -18,8 +17,7 @@ import FilterEntities from './filter-entities'
 import AddEntities from './add-entities'
 import { setHotelName } from '../../../redux/slice/menuSlice'
 import HotelData from './hotel-data'
-
-
+import { getHotelEntity } from '../../../redux/slice/admin/register-entity-hotel'
 
 
 export default function AllEntities() {
@@ -32,8 +30,7 @@ export default function AllEntities() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const selectedHotelId = useSelector((state) => state.auth.hotel)
-    const { hotelProfileById, loading, message, error } = useSelector((state) => state.hotelProfileById)
-
+    const { hotelRegister, loading, message, error } = useSelector((state) => state.entityHotel)
 
     // Exibir mensagem com duração de 5 segundos
     useEffect(() => {
@@ -45,7 +42,7 @@ export default function AllEntities() {
             return () => clearTimeout(timer)
         }
         setVisibleMessage('')
-    }, [message, hotelProfileById])
+    }, [message, hotelRegister])
 
     // Exibir erro com duração de 5 segundos
     useEffect(() => {
@@ -69,23 +66,23 @@ export default function AllEntities() {
 
     // Retorna todos as entidades criadas e usuários atualizados
     useEffect(() => {
-        dispatch(getHotelById())
+        dispatch(getHotelEntity())
     }, [dispatch])
 
     // Restaurar a entidade filtrada do cookie ao carregar a página
     useEffect(() => {
-        if (selectedHotelId && hotelProfileById.length > 0) {
-            const selectedEntity = hotelProfileById.find((entity) => String(entity.id) === String(selectedHotelId))
+        if (selectedHotelId && hotelRegister.length > 0) {
+            const selectedEntity = hotelRegister.find((entity) => String(entity.id) === String(selectedHotelId))
             if (selectedEntity) {
                 setFilteredEntities([selectedEntity])
                 dispatch(setHotel(selectedHotelId))
             }
         }
-    }, [dispatch, hotelProfileById])
+    }, [dispatch, hotelRegister])
 
     // Associa o id do hotel selecionado ao atributo hotel do admin
     const handleAccessEntity = async (hotel_id) => {
-        const selectedEntity = hotelProfileById.find((entity) => entity.id === hotel_id)
+        const selectedEntity = hotelRegister.find((entity) => entity.id === hotel_id)
         if (selectedEntity) {
             dispatch(updateHotelId({ hotel_id }))
             dispatch(setHotel(hotel_id))
@@ -112,7 +109,7 @@ export default function AllEntities() {
             {visibleMessage && !loading && !error && (
                 <Alert sx={{ mt: 0, mb: 1 }} severity={visibleMessage.includes('sucesso') ? 'success' : 'info'}>{visibleMessage}</Alert>
             )}
-            {hotelProfileById.length === 0 && !visibleMessage && !loading && !error && (
+            {hotelRegister.length === 0 && !visibleMessage && !loading && !error && (
                 <Alert sx={{ mt: 0, mb: 1 }} severity="info">Você não possui entidades criadas.</Alert>
             )}
             {error && !loading && (
@@ -188,7 +185,7 @@ export default function AllEntities() {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {(filteredEntities || hotelProfileById).map((entity) => (
+                                    {(filteredEntities || hotelRegister).map((entity) => (
                                         <TableRow sx={{ background: '#FFF' }} key={entity.id}>
                                             <TableCell sx={{ justifyContent: 'space-around', fontSize: '0.8rem', border: '1px solid #ccc', padding: '8px', ml: 2, textAlign: 'center' }}>
                                                 <Box>{entity.registered_name}</Box>

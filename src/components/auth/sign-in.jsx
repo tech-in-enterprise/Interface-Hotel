@@ -57,7 +57,6 @@ export default function SignIn() {
             return
         }
         dispatch(loginUser.pending())
-        console.log('Se chegou aqui, os campos foram preenchidos corretamente', loginUser)
         setTimeout(async () => {
             dispatch(loginUser({ email, password }))
                 .unwrap()

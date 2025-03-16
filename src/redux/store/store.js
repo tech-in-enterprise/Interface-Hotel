@@ -3,10 +3,11 @@ import loginSlice from '../slice/auth/loginSlice'
 import menuReducer from '../slice/menuSlice'
 import departments from '../slice/managment/departments'
 import services from '../slice/managment/serviceSlice'
-import hotelSlice from '../slice/admin/register-entity-hotel'
+import hotelEntity from '../slice/admin/register-entity-hotel'
 import roleSlice from '../slice/roles/roleSlice'
 import allUsers from '../slice/admin/users'
 import hotelById from '../slice/managment/profile-info-hotel'
+import amenities from '../slice/managment/hotel_amenities'
 
 
 export const store = configureStore({
@@ -15,10 +16,11 @@ export const store = configureStore({
         menu: menuReducer,
         roles: roleSlice,
         users: allUsers,
-        entityHotel: hotelSlice,
+        entityHotel: hotelEntity,
         hotelProfileById: hotelById,
         departments: departments,
         services: services,
+        amenities: amenities,
     },
 
 })
