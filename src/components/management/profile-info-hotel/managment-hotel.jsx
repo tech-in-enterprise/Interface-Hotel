@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { TextField, Grid, Button, Box } from '@mui/material'
 import Paper from '@mui/material/Paper'
 import Title from '../../general-components/title-from-pages'
-import Comodities from './comodities'
 import AlertMessages from '../../general-components/alert-messages'
 import { useDispatch, useSelector } from 'react-redux'
 import { getHotelById, managementProfileHotel, updateManagementProfileHotel } from '../../../redux/slice/managment/profile-info-hotel'
 import ImageUploader from '../../general-components/image-uploader'
 import Skeleton from '@mui/material/Skeleton'
+import Comodities from './comodities'
 
 
 export default function ManagementHotel() {
@@ -40,9 +40,7 @@ export default function ManagementHotel() {
     // Filtrar o hotel que está sendo reenderizado
     useEffect(() => {
         if (Array.isArray(hotelProfileById) && selectedHotelId) {
-            const filtered = hotelProfileById.filter(
-                (profileHotel) => String(profileHotel.hotel_id) === String(selectedHotelId)
-            )
+            const filtered = hotelProfileById.filter((profileHotel) => String(profileHotel.hotel_id) === String(selectedHotelId))
             setFilteredHotelProfile(filtered)
         }
     }, [hotelProfileById, selectedHotelId])
@@ -232,8 +230,6 @@ export default function ManagementHotel() {
                     )}
                 </Grid>
             </Paper>
-
-            <Title Title='Amenidades do Hotel' />
             <Comodities />
         </>
     )

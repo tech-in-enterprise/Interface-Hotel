@@ -29,6 +29,8 @@ export default function Department() {
     const selectedHotelId = useSelector((state) => state.auth.hotel)
     const { departments, message, error, loading } = useSelector((state) => state.departments)
 
+    const [editingId, setEditingId] = useState(null)
+
     // Retorna todos os departamentos criados
     useEffect(() => {
         dispatch(getAllDepartments())
